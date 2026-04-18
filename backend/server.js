@@ -4,9 +4,14 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 
+const connectDB = require("./config/db");
+
 dotenv.config();
 
 const app = express();
+
+// Initialize DB Connection
+connectDB();
 
 // Middleware
 app.use(cors());
@@ -17,12 +22,6 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/clothes", require("./routes/clothRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/upload", require("./routes/uploadRoutes"));
-
-// Database connection
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("✅ MongoDB Connected Successfully"))
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 // Vercel Serverless Export
 if (process.env.NODE_ENV !== "production") {

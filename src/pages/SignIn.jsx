@@ -11,6 +11,7 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
@@ -27,11 +28,13 @@ export function SignIn() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
+      setError("");
       await signIn(email, password);
       // Navigate to dashboard after slightly delaying so animation plays out
       navigate("/dashboard");
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Invalid email or password. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -70,6 +73,11 @@ export function SignIn() {
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 max-w-sm px-4 sm:px-0"
       >
         <div className="bg-card py-8 px-6 shadow-[0_8px_40px_rgba(0,0,0,0.08)] sm:rounded-[32px] sm:px-10 border border-border/50">
+          {error && (
+            <div className="mb-6 p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium animate-in fade-in slide-in-from-top-2">
+              {error}
+            </div>
+          )}
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <Label htmlFor="email" className="font-semibold text-foreground">Email address</Label>
