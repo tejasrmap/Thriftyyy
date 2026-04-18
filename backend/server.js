@@ -10,8 +10,17 @@ dotenv.config();
 
 const app = express();
 
-// Initialize DB Connection
-connectDB();
+// Database Connection Middleware for Serverless Stability
+const dbMiddleware = async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Database connection failed", error: error.message });
+  }
+};
+
+app.use(dbMiddleware);
 
 // Middleware
 app.use(cors());
