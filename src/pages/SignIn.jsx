@@ -34,7 +34,7 @@ export function SignIn() {
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Invalid email or password. Please try again.");
+      setError(err.response?.data?.error || err.response?.data?.message || "Invalid email or password. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

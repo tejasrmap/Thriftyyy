@@ -27,6 +27,11 @@ export function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+    
     setIsSubmitting(true);
     try {
       setError("");
@@ -34,7 +39,7 @@ export function SignUp() {
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Registration failed. Please try a different email.");
+      setError(err.response?.data?.error || err.response?.data?.message || "Registration failed. Please try a different email.");
     } finally {
       setIsSubmitting(false);
     }
