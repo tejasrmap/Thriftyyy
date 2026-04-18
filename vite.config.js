@@ -31,16 +31,12 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks(id) {
             if (id.includes("node_modules")) {
-              if (id.includes("lucide-react")) return "ui-icons";
-              if (id.includes("motion")) return "animations";
-              if (id.includes("react")) return "vendor-react";
-              if (id.includes("@google/genai")) return "genai";
               return "vendor";
             }
           },
         },
       },
-      chunkSizeWarningLimit: 800,
+      chunkSizeWarningLimit: 1000,
     },
   };
 });

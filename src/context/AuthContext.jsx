@@ -18,12 +18,20 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("luxerentUser");
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      authenticateUser(parsed);
+    try {
+      const storedUser = localStorage.getItem("luxerentUser");
+      if (storedUser && storedUser !== "undefined") {
+        const parsed = JSON.parse(storedUser);
+        if (parsed && parsed.token) {
+          authenticateUser(parsed);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to restore auth state:", error);
+      localStorage.removeItem("luxerentUser");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const signIn = async (email, password) => {
