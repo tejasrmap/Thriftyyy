@@ -3,19 +3,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Navbar } from "./components/Navbar";
-import { Home } from "./pages/Home";
-import { Browse } from "./pages/Browse";
-import { ClothDetails } from "./pages/ClothDetails";
-import { Dashboard } from "./pages/Dashboard";
-import { Admin } from "./pages/Admin";
-import { SignIn } from "./pages/SignIn";
-import { SignUp } from "./pages/SignUp";
 import { AdminLayout } from "./components/AdminLayout";
-import { AdminLogin } from "./pages/AdminLogin";
+
+// Lazy-loaded pages
+const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
+const Browse = lazy(() => import("./pages/Browse").then(m => ({ default: m.Browse })));
+const ClothDetails = lazy(() => import("./pages/ClothDetails").then(m => ({ default: m.ClothDetails })));
+const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })));
+const Admin = lazy(() => import("./pages/Admin").then(m => ({ default: m.Admin })));
+const SignIn = lazy(() => import("./pages/SignIn").then(m => ({ default: m.SignIn })));
+const SignUp = lazy(() => import("./pages/SignUp").then(m => ({ default: m.SignUp })));
+const AdminLogin = lazy(() => import("./pages/AdminLogin").then(m => ({ default: m.AdminLogin })));
+
+// Loading Component
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 function MainLayout() {
   return (
@@ -48,25 +58,27 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <Router>
-          <Routes>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            
-            {/* Strict Admin Zone */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            
-            <Route element={<AdminLayout />}>
-              <Route path="/admin" element={<Admin />} />
-            </Route>
-            
-            {/* Public Consumer Zone */}
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/browse" element={<Browse />} />
-              <Route path="/cloth/:id" element={<ClothDetails />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Route>
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              
+              {/* Strict Admin Zone */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              
+              <Route element={<AdminLayout />}>
+                <Route path="/admin" element={<Admin />} />
+              </Route>
+              
+              {/* Public Consumer Zone */}
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/browse" element={<Browse />} />
+                <Route path="/cloth/:id" element={<ClothDetails />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+            </Routes>
+          </Suspense>
         </Router>
       </AuthProvider>
     </ErrorBoundary>
