@@ -39,7 +39,8 @@ export function SignUp() {
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.error || err.response?.data?.message || "Registration failed. Please try a different email.");
+      const message = err.response?.data?.message || err.response?.data?.error || "Registration failed. Please try a different email.";
+      setError(typeof message === "string" ? message : JSON.stringify(message));
     } finally {
       setIsSubmitting(false);
     }
@@ -78,7 +79,7 @@ export function SignUp() {
         <div className="bg-white py-12 px-10 border border-black/[0.03] shadow-[0_40px_80px_rgba(0,0,0,0.05)] rounded-[2rem]">
           {error && (
             <div className="mb-8 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-[11px] font-bold uppercase tracking-widest text-center">
-              {error}
+              {typeof error === "string" ? error : (error.message || JSON.stringify(error))}
             </div>
           )}
           <form className="space-y-8" onSubmit={handleSubmit}>

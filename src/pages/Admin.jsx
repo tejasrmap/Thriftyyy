@@ -76,8 +76,12 @@ export function Admin() {
       setBookings(bookingsRes.data);
       
       if (role === "admin") {
-        const empRes = await axios.get("/api/admin/employees");
-        setEmployees(empRes.data);
+        try {
+          const empRes = await axios.get("/api/admin/employees");
+          setEmployees(empRes.data);
+        } catch (err) {
+          console.error("Employee Fetch Error:", err.response?.status, err.message);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -229,11 +233,13 @@ export function Admin() {
         <div className="flex items-center gap-4">
            {permissions.canManageInventory && (
              <Sheet>
-               <SheetTrigger asChild>
-                 <Button className="rounded-full px-8 py-6 bg-black text-white hover:bg-zinc-800 shadow-xl transition-all font-bold uppercase tracking-widest text-xs">
-                   <PlusCircle className="w-4 h-4 mr-2" /> Add New Piece
-                 </Button>
-               </SheetTrigger>
+               <SheetTrigger
+                 render={
+                   <Button className="rounded-full px-8 py-6 bg-black text-white hover:bg-zinc-800 shadow-xl transition-all font-bold uppercase tracking-widest text-xs">
+                     <PlusCircle className="w-4 h-4 mr-2" /> Add New Piece
+                   </Button>
+                 }
+               />
                <SheetContent side="right" className="w-[400px] sm:w-[540px] bg-white p-10">
                  <SheetHeader className="mb-10 text-left">
                    <SheetTitle className="text-4xl font-display font-extrabold tracking-tighter uppercase">New Catalog Entry</SheetTitle>
@@ -386,11 +392,13 @@ export function Admin() {
                            <div className="flex items-center justify-end gap-2">
                               {permissions.canManageInventory && (
                                 <Sheet>
-                                  <SheetTrigger asChild>
-                                    <Button size="icon" variant="ghost" className="w-10 h-10 rounded-full hover:bg-black hover:text-white transition-all" onClick={() => openEdit(cloth)}>
-                                      <Edit2 className="w-4 h-4" />
-                                    </Button>
-                                  </SheetTrigger>
+                                  <SheetTrigger
+                                    render={
+                                      <Button size="icon" variant="ghost" className="w-10 h-10 rounded-full hover:bg-black hover:text-white transition-all" onClick={() => openEdit(cloth)}>
+                                        <Edit2 className="w-4 h-4" />
+                                      </Button>
+                                    }
+                                  />
                                   <SheetContent side="right" className="w-[400px] sm:w-[500px] bg-white p-10">
                                       <SheetHeader className="mb-10 text-left">
                                          <SheetTitle className="text-4xl font-display font-extrabold tracking-tighter uppercase">Edit Evolution</SheetTitle>

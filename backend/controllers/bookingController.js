@@ -36,6 +36,17 @@ const addBookingItems = async (req, res) => {
     });
 
     const createdBooking = await booking.save();
+
+    // Trigger Automated Email Notification
+    const { sendBookingEmail } = require("../utils/mailer");
+    sendBookingEmail(req.user.email, req.user.fullName, {
+      itemTitle: cloth.title,
+      startDate: booking.startDate,
+      endDate: booking.endDate,
+      totalPrice: booking.totalPrice,
+      bookingId: createdBooking._id.toString().substring(18).toUpperCase(),
+    });
+
     res.status(201).json(createdBooking);
   } catch (error) {
     console.error(error);

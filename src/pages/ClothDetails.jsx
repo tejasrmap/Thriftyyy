@@ -58,34 +58,76 @@ export function ClothDetails() {
   };
 
   const processPaymentAndBook = async () => {
+    if (!user || !date?.from || !date?.to || !cloth) return;
     setPaymentProcessing(true);
-    
-    // Simulate Razorpay/Stripe processing delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    
-    setBookingLoading(true);
+
     try {
-      const days = Math.ceil(
-        (date.to.getTime() - date.from.getTime()) / (1000 * 60 * 60 * 24),
-      );
+      const days = Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 60 * 60 * 24));
       const totalPrice = days * cloth.pricePerDay;
 
-      await axios.post("/api/bookings", {
-        clothId: cloth._id,
-        startDate: date.from.getTime(),
-        endDate: date.to.getTime(),
-        totalPrice,
+      // 1. Create order on backend
+      const { data: order } = await axios.post("/api/payments/razor", {
+        amount: totalPrice,
+        currency: "USD", // Note: Razorpay default is INR, but we'll use USD as seen in UI, check Razorpay account support
+        receipt: `receipt_${Date.now()}`,
       });
 
-      setCloth({ ...cloth, availability: false });
-      setShowCheckout(false);
-      navigate("/dashboard");
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_SfQRsRpAF0JY1T", // Provided by user
+        amount: order.amount,
+        currency: order.currency,
+        name: "Thriftyy",
+        description: `Rental: ${cloth.title}`,
+        order_id: order.id,
+        handler: async (response) => {
+          try {
+            // 2. Verify payment on backend
+            const { data: verifyData } = await axios.post("/api/payments/verify", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verifyData.status === "success") {
+              // 3. Save booking
+              setBookingLoading(true);
+              await axios.post("/api/bookings", {
+                clothId: cloth._id,
+                startDate: date.from.getTime(),
+                endDate: date.to.getTime(),
+                totalPrice,
+              });
+
+              setCloth({ ...cloth, availability: false });
+              setShowCheckout(false);
+              navigate("/dashboard");
+            }
+          } catch (err) {
+            console.error("Verification failed", err);
+            alert("Payment verification failed. Please contact support.");
+          } finally {
+            setBookingLoading(false);
+            setPaymentProcessing(false);
+          }
+        },
+        prefill: {
+          name: user.fullName,
+          email: user.email,
+        },
+        theme: {
+          color: "#000000",
+        },
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert("Payment failed: " + response.error.description);
+        setPaymentProcessing(false);
+      });
+      rzp1.open();
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Failed to book item (check dates)");
-      setShowCheckout(false);
-    } finally {
-      setBookingLoading(false);
+      alert("Failed to initiate payment. Please try again.");
       setPaymentProcessing(false);
     }
   };
@@ -305,7 +347,7 @@ export function ClothDetails() {
             <div className="bg-primary p-6 text-primary-foreground flex justify-between items-center">
               <div>
                 <h3 className="font-bold text-xl tracking-tight">Secure Checkout</h3>
-                <p className="text-sm opacity-80">Powered by Stripe</p>
+                <p className="text-sm opacity-80">Powered by Razorpay</p>
               </div>
               <ShieldCheck className="w-8 h-8 opacity-50" />
             </div>

@@ -100,6 +100,31 @@ const deleteCloth = async (req, res) => {
   }
 };
 
+// @desc    Update a cloth availability status
+// @route   PUT /api/clothes/:id/status
+// @access  Private/Admin
+const updateClothStatus = async (req, res) => {
+  try {
+    const { availability } = req.body;
+    const cloth = await Cloth.findById(req.params.id);
+
+    if (cloth) {
+      if (typeof availability === "boolean") {
+        cloth.availability = availability;
+        const updatedCloth = await cloth.save();
+        res.json(updatedCloth);
+      } else {
+        res.status(400).json({ message: "Invalid availability value" });
+      }
+    } else {
+      res.status(404).json({ message: "Cloth not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 module.exports = {
   getClothes,
   getClothById,

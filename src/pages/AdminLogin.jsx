@@ -23,7 +23,8 @@ export function AdminLogin() {
       await adminSignIn(email, password);
       navigate("/admin");
     } catch (err) {
-      setError(err.message || "Authentication failed. Unauthorized access.");
+      const message = err.response?.data?.message || err.message || "Authentication failed. Unauthorized access.";
+      setError(typeof message === "string" ? message : JSON.stringify(message));
     } finally {
       setIsSubmitting(false);
     }
@@ -59,7 +60,7 @@ export function AdminLogin() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
               <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm font-medium text-center">
-                {error}
+                {typeof error === "string" ? error : (error.message || JSON.stringify(error))}
               </div>
             )}
             <div>
