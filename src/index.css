@@ -10,6 +10,9 @@
     --font-display: 'Bricolage Grotesque', sans-serif;
     --tracking-architectural: -0.05em;
     --ease-studio: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --color-selection-background: black;
+    --color-selection-foreground: white;
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);

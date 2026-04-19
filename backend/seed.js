@@ -17,32 +17,50 @@ const mongooseConnect = async () => {
 
 const INITIAL_CLOTHES = [
   {
-    title: "Elegant Evening Gown",
-    description: "A beautiful evening gown for formal events.",
+    title: "Dior Shadow Vest",
+    description: "Premium velvet finish with architectural silhouette. A statement piece for gallery openings or high-fashion events.",
     category: "formal",
     size: "M",
-    pricePerDay: 45,
+    pricePerDay: 150,
     availability: true,
-    imageUrl: "https://picsum.photos/seed/gown/400/600",
+    imageUrl: "https://images.unsplash.com/photo-1617114919297-3c8ddb01f599?q=80&w=2000&auto=format&fit=crop",
   },
   {
-    title: "Classic Tuxedo",
-    description: "Black tuxedo perfect for weddings.",
+    title: "Saint Laurent Tuxedo",
+    description: "Peak lapel tuxedo in grain de poudre wool. The ultimate choice for black-tie affairs and weddings.",
     category: "wedding",
     size: "L",
-    pricePerDay: 60,
+    pricePerDay: 200,
     availability: true,
-    imageUrl: "https://picsum.photos/seed/tux/400/600",
+    imageUrl: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?q=80&w=2000&auto=format&fit=crop",
   },
   {
-    title: "Summer Party Dress",
-    description: "Light and breezy dress for summer parties.",
+    title: "Balenciaga Oversized Coat",
+    description: "Dramatic proportions and heavy wool blend. Perfect for making an entrance at winter party circuits.",
     category: "party",
-    size: "S",
-    pricePerDay: 30,
+    size: "L",
+    pricePerDay: 180,
     availability: true,
-    imageUrl: "https://picsum.photos/seed/dress/400/600",
+    imageUrl: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=2000&auto=format&fit=crop",
   },
+  {
+    title: "Gucci Flora Silk Gown",
+    description: "Ethereal silk chiffon with iconic flora print. A timeless masterpiece for summer galas.",
+    category: "formal",
+    size: "S",
+    pricePerDay: 220,
+    availability: true,
+    imageUrl: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=2000&auto=format&fit=crop",
+  },
+  {
+    title: "Prada Nylon Parka",
+    description: "Technical elegance with re-nylon fabric. Versatile for elevated casual outings and weekend archives.",
+    category: "casual",
+    size: "M",
+    pricePerDay: 95,
+    availability: true,
+    imageUrl: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=2000&auto=format&fit=crop",
+  }
 ];
 
 const seedDB = async () => {
@@ -57,6 +75,15 @@ const seedDB = async () => {
     // Insert new data
     await Cloth.insertMany(INITIAL_CLOTHES);
     console.log("👕 Injected initial Cloth catalog");
+
+    // Insert Admin User
+    await User.create({
+      fullName: "Master Admin",
+      email: "admin@thriftyy.com",
+      password: "admin123",
+      role: "admin"
+    });
+    console.log("🔑 Created default Admin: admin@thriftyy.com / admin123");
 
     console.log("🌱 Database seeded successfully!");
   } catch (error) {

@@ -5,7 +5,7 @@ import { Badge } from "../components/ui/badge";
 import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingBag, ArrowRight } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 export function Dashboard() {

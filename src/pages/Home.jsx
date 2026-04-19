@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { buttonVariants } from "../components/ui/button";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, ShieldCheck, RefreshCw } from "lucide-react";
 import { cn } from "../lib/utils";
 

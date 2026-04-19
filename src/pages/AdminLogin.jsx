@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { ShieldAlert, Loader2 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 export function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -40,10 +40,11 @@ export function AdminLogin() {
             <ShieldAlert className="w-8 h-8 text-red-500" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold tracking-tight">
-          Thriftyy Control
+        <h2 className="mt-8 text-center text-5xl font-display font-extrabold tracking-architectural uppercase leading-[0.9]">
+          Archive <br />
+          <span className="text-red-600">Control.</span>
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-400 font-medium uppercase tracking-widest">
+        <p className="mt-4 text-center text-xs text-zinc-500 font-bold uppercase tracking-[0.3em]">
           Restricted Auth Portal
         </p>
       </div>

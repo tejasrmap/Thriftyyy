@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal } from "lucide-react";
 import axios from "axios";
 
@@ -77,14 +77,14 @@ export function Browse() {
         <AnimatePresence>
           {filteredClothes.map((cloth, idx) => (
             <motion.div
-              key={cloth.id}
+              key={cloth._id}
               layout
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.5, delay: idx * 0.05 }}
             >
-              <Link to={`/cloth/${cloth.id}`} className="group block">
+              <Link to={`/cloth/${cloth._id}`} className="group block">
                 <div className="boutique-card aspect-[3/4] mb-6 relative shadow-sm group-hover:boutique-card-hover">
                   {/* Indigo Price Tag */}
                   <div className="absolute top-4 right-4 z-20">

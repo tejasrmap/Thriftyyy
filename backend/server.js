@@ -31,6 +31,7 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/clothes", require("./routes/clothRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/upload", require("./routes/uploadRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
 
 // Vercel Serverless Export
 if (process.env.NODE_ENV !== "production") {

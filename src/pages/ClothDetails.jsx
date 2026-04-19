@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import axios from "axios";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 export function ClothDetails() {
   const { id } = useParams();
