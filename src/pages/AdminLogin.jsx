@@ -41,7 +41,7 @@ export function AdminLogin() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold tracking-tight">
-          LuxeRent Control
+          Thriftyy Control
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400 font-medium uppercase tracking-widest">
           Restricted Auth Portal
@@ -72,7 +72,7 @@ export function AdminLogin() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="h-12 bg-black/50 text-white border-white/20 focus:border-red-500 transition-colors"
-                  placeholder="admin@luxerent.com"
+                  placeholder="admin@thriftyy.com"
                 />
               </div>
             </div>

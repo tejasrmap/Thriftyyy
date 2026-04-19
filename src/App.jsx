@@ -38,14 +38,14 @@ function MainLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3 opacity-90 hover:opacity-100 transition-opacity">
             <div className="w-9 h-9 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl rounded-lg shadow-sm">
-              L
+              T
             </div>
             <span className="font-semibold text-lg tracking-tight text-foreground">
-              LuxeRent
+              Thriftyy
             </span>
           </div>
           <div className="text-sm text-muted-foreground font-medium">
-            © 2026 LuxeRent. Premium Clothing Rental. Built for Final Project.
+            © 2026 Thriftyy. Premium Clothing Rental. Built for Final Project.
           </div>
         </div>
       </footer>

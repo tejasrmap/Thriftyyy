@@ -60,14 +60,14 @@ export function SignUp() {
         </Link>
         <div className="flex justify-center">
           <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center font-bold text-2xl rounded-xl shadow-lg">
-            L
+            T
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground tracking-tight">
           Create an account
         </h2>
         <p className="mt-2 text-center text-sm text-muted-foreground font-medium">
-          Join LuxeRent to start renting premium pieces
+          Join Thriftyy to start renting premium pieces
         </p>
       </div>
 

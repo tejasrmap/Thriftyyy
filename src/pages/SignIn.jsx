@@ -55,7 +55,7 @@ export function SignIn() {
         </Link>
         <div className="flex justify-center">
           <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center font-bold text-2xl rounded-xl shadow-lg">
-            L
+            T
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground tracking-tight">

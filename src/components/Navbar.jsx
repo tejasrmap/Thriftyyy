@@ -15,10 +15,10 @@ export function Navbar() {
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-9 h-9 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl rounded-lg shadow-sm group-hover:shadow-md transition-all group-hover:-translate-y-0.5">
-              L
+              T
             </div>
             <span className="font-bold text-xl tracking-tight hidden sm:block text-foreground">
-              LuxeRent
+              Thriftyy
             </span>
           </Link>
 

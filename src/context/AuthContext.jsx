@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
 
   // Helper to set axial headers & localStorage
   const authenticateUser = (userData) => {
-    localStorage.setItem("luxerentUser", JSON.stringify(userData));
+    localStorage.setItem("thriftyyUser", JSON.stringify(userData));
     setUser(userData);
     setRole(userData.role);
     // Bind token generically to all future Axios requests
@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem("luxerentUser");
+      const storedUser = localStorage.getItem("thriftyyUser");
       if (storedUser && storedUser !== "undefined") {
         const parsed = JSON.parse(storedUser);
         if (parsed && parsed.token) {
@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       console.error("Failed to restore auth state:", error);
-      localStorage.removeItem("luxerentUser");
+      localStorage.removeItem("thriftyyUser");
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
   };
 
   const logOut = async () => {
-    localStorage.removeItem("luxerentUser");
+    localStorage.removeItem("thriftyyUser");
     setUser(null);
     setRole(null);
     delete axios.defaults.headers.common["Authorization"];

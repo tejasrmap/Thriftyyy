@@ -66,7 +66,7 @@ export function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
-              How LuxeRent Works
+              How Thriftyy Works
             </h2>
             <p className="mt-4 text-lg text-muted-foreground font-medium">
               A seamless experience from booking to return.

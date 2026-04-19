@@ -29,7 +29,7 @@ export function AdminLayout() {
           <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
             <Shield className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-lg tracking-tight">LuxeRent Control Center</span>
+          <span className="font-bold text-lg tracking-tight">Thriftyy Control Center</span>
           <span className="px-2 py-0.5 ml-2 rounded-full bg-red-500/20 text-red-400 text-xs font-bold uppercase tracking-widest border border-red-500/30">
             Internal Use Only
           </span>

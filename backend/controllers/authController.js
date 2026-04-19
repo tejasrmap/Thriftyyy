@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
 
     // Role calculation: just mimicking previous mock logic for demonstration
     // Usually you shouldn't allow admin assignment directly via registration
-    const role = email === "admin@luxerent.com" ? "admin" : "user";
+    const role = email === "admin@thriftyy.com" ? "admin" : "user";
 
     const user = await User.create({
       fullName,

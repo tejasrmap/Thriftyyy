@@ -22,7 +22,7 @@ const uploadToCloudinary = (fileBuffer) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: "luxerent",
+        folder: "thriftyy",
         resource_type: "auto",
         allowed_formats: ["jpg", "png", "jpeg", "webp"],
       },
