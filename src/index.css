@@ -2,13 +2,13 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Premium Font Import */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
-
-@custom-variant dark (&:is(.dark *));
+/* Premium Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Libre+Baskerville:ital@0;1&display=swap');
 
 @theme inline {
-    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-sans: 'Outfit', sans-serif;
+    --font-serif: 'Libre Baskerville', serif;
+    
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -30,33 +30,29 @@
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) + 4px);
-    --radius-2xl: calc(var(--radius) + 8px);
-    --radius-3xl: calc(var(--radius) + 12px);
-    --radius-4xl: calc(var(--radius) + 16px);
 }
 
 :root {
-    /* Editorial Midnight Theme */
-    --background: #020205; /* Deep Ink */
-    --foreground: #FFFFFF;
-    --card: #0A0A12;
-    --card-foreground: #FFFFFF;
-    --popover: #0A0A12;
-    --popover-foreground: #FFFFFF;
-    --primary: #FFFFFF;
-    --primary-foreground: #020205;
-    --secondary: #11111F;
-    --secondary-foreground: #E2E2E2;
-    --muted: #11111F;
-    --muted-foreground: #A1A1AA;
-    --accent: #212132;
-    --accent-foreground: #FFFFFF;
-    --destructive: #FF4D4D;
-    --border: rgba(255, 255, 255, 0.08);
-    --input: rgba(255, 255, 255, 0.05);
-    --ring: #FFFFFF;
-    --radius: 20px; /* Modern, softer radius */
+    /* Atelier Minimal - Warm Quiet Luxury Palette */
+    --background: #FCFCFC; /* Soft Mist */
+    --foreground: #1A1A1A; /* Deep Charcoal */
+    --card: #F7F7F7;
+    --card-foreground: #1A1A1A;
+    --popover: #FFFFFF;
+    --popover-foreground: #1A1A1A;
+    --primary: #1A1A1A;
+    --primary-foreground: #FFFFFF;
+    --secondary: #EFEFEF;
+    --secondary-foreground: #1A1A1A;
+    --muted: #F2F2F2;
+    --muted-foreground: #717171;
+    --accent: #E5E5E5;
+    --accent-foreground: #1A1A1A;
+    --destructive: #D93025;
+    --border: rgba(0, 0, 0, 0.08);
+    --input: rgba(0, 0, 0, 0.05);
+    --ring: #1A1A1A;
+    --radius: 12px; /* Sophisticated, sharp corners */
 }
 
 @layer base {
@@ -67,41 +63,38 @@
     @apply bg-background text-foreground tracking-tight antialiased;
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
     background-image: 
-      radial-gradient(at 0% 0%, rgba(31, 31, 71, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(20, 20, 45, 0.15) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(230, 230, 230, 0.3) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(245, 245, 245, 0.3) 0px, transparent 50%);
   }
   html {
     @apply font-sans;
   }
 }
 
-@layer components {
-  .glass {
-    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)];
-  }
-  
-  .glass-card {
-    @apply glass rounded-[32px] transition-all duration-500 hover:bg-white/[0.05] hover:border-white/[0.12];
-  }
+@utility glass {
+  @apply bg-white/70 backdrop-blur-xl border border-black/[0.03] shadow-[0_4px_24px_rgba(0,0,0,0.02)];
+}
 
-  .glow-text {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
+@utility glass-card {
+  @apply bg-white border border-black/[0.05] rounded-[16px] transition-all duration-500 hover:border-black/[0.12] hover:shadow-[0_12px_44px_rgba(0,0,0,0.04)];
+}
 
-  /* Editorial Card Styling */
-  .boutique-card {
-    @apply relative overflow-hidden rounded-[2.5rem] bg-[#0A0A12] border border-white/[0.05] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)];
-  }
-  
-  .boutique-card:hover {
-    @apply -translate-y-2 border-white/[0.15] shadow-[0_20px_50px_rgba(0,0,0,0.5)];
-  }
+@utility boutique-card {
+  @apply relative overflow-hidden rounded-[8px] bg-[#F7F7F7] border border-black/[0.05] transition-all duration-500 ease-out;
+}
 
-  .hide-scrollbar::-webkit-scrollbar {
+@utility boutique-card-hover {
+  @apply -translate-y-1.5 border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.06)];
+}
+
+@utility section-title {
+  @apply font-serif text-5xl md:text-7xl tracking-tight text-foreground leading-[1.1];
+}
+
+@utility hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
     display: none;
-  }
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 }

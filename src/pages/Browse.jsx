@@ -38,66 +38,61 @@ export function Browse() {
   }
 
   return (
-    <div className="max-w-[1600px] mx-auto px-6 py-24">
-      <header className="mb-24 text-center">
-        <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="inline-flex items-center px-4 py-2 rounded-full glass border-white/5 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 text-white/50"
-        >
-          Curated Showcase
-        </motion.div>
-        <h1 className="text-6xl md:text-8xl font-black tracking-tighter glow-text mb-6">
-          The <span className="text-white/20 italic">Collection</span>
+    <div className="max-w-7xl mx-auto px-6 py-24">
+      <header className="mb-24">
+        <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-black/20 mb-6 block">
+          Archival Series • Digital Studio
+        </span>
+        <h1 className="font-serif text-5xl md:text-7xl tracking-tight text-black mb-12">
+          The Collection
         </h1>
-        <div className="flex justify-center mt-12 overflow-x-auto pb-4 hide-scrollbar">
-          <div className="glass p-1.5 rounded-full flex gap-1">
-            {["all", "wedding", "party", "casual", "formal"].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-500 ${
-                  filter === cat
-                    ? "bg-white text-black shadow-2xl scale-105"
-                    : "text-white/40 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+        
+        <div className="flex flex-wrap items-center gap-4 border-b border-black/[0.05] pb-10">
+          {["all", "wedding", "party", "casual", "formal"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-8 py-3 rounded-[4px] text-[10px] font-bold uppercase tracking-[0.2em] transition-all ${
+                filter === cat
+                  ? "bg-black text-white"
+                  : "text-black/40 hover:text-black hover:bg-black/5"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </header>
 
       <motion.div
         layout
-        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-20"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16"
       >
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {filteredClothes.map((cloth, idx) => (
             <motion.div
               key={cloth.id}
               layout
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.8, delay: idx * 0.05, ease: [0.23, 1, 0.32, 1] }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.6, delay: idx * 0.05, ease: [0.23, 1, 0.32, 1] }}
             >
               <Link to={`/cloth/${cloth.id}`} className="group block">
-                <div className="boutique-card aspect-[3/4.5] mb-8 relative">
-                  {/* Floating Price Tag */}
-                  <div className="absolute top-6 right-6 z-20">
-                    <div className="glass px-5 py-2.5 rounded-2xl font-black text-lg border-white/10 shadow-2xl transition-transform group-hover:scale-110 group-hover:-rotate-3">
-                      ${cloth.pricePerDay}
+                <div className="boutique-card aspect-[3/4] mb-6 relative">
+                  {/* Pinned Price Tag */}
+                  <div className="absolute top-4 right-4 z-20">
+                    <div className="bg-white/90 backdrop-blur-md px-4 py-2 text-[13px] font-bold tracking-tight text-black border border-black/5 rounded-sm shadow-sm group-hover:scale-105 transition-transform">
+                      ${cloth.pricePerDay} / day
                     </div>
                   </div>
 
-                  {/* Availability Overlay */}
+                  {/* Minimal Availability Overlay */}
                   {!cloth.availability && (
                     <div className="absolute inset-0 z-30 flex items-center justify-center p-6 text-center">
-                      <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
-                      <span className="relative text-xs font-black uppercase tracking-[0.3em] border-2 border-white/20 px-6 py-3 rounded-full">
-                        Fully Booked
+                      <div className="absolute inset-0 bg-white/60 backdrop-blur-sm" />
+                      <span className="relative text-[10px] font-bold uppercase tracking-[0.3em] border border-black/10 px-6 py-3 rounded-sm text-black/40 bg-white shadow-sm">
+                        Reserved
                       </span>
                     </div>
                   )}
@@ -105,24 +100,21 @@ export function Browse() {
                   <img
                     src={cloth.imageUrl}
                     alt={cloth.title}
-                    className="w-full h-full object-cover transition-all duration-[2s] group-hover:scale-110 group-hover:rotate-2 brightness-75 group-hover:brightness-100"
+                    className="w-full h-full object-cover grayscale-[0.2] transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
-                  
-                  {/* Bottom Vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
                 </div>
 
-                <div className="px-2">
-                  <div className="flex items-center justify-between gap-4 mb-2">
-                    <h3 className="text-2xl font-bold tracking-tight group-hover:glow-text transition-all duration-500">
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className="text-lg font-bold tracking-tight text-black group-hover:opacity-40 transition-opacity">
                       {cloth.title}
                     </h3>
-                    <span className="text-[10px] uppercase font-black tracking-widest text-white/30 border border-white/10 px-3 py-1 rounded-full whitespace-nowrap">
+                    <span className="text-[9px] uppercase font-bold tracking-[0.2em] text-black/20 whitespace-nowrap">
                       {cloth.category}
                     </span>
                   </div>
-                  <p className="text-white/40 text-sm font-medium line-clamp-1 group-hover:text-white/60 transition-colors">
+                  <p className="text-black/40 text-[13px] font-medium leading-relaxed line-clamp-1">
                     {cloth.description}
                   </p>
                 </div>
@@ -131,6 +123,7 @@ export function Browse() {
           ))}
         </AnimatePresence>
       </motion.div>
+    </div>
 
       {filteredClothes.length === 0 && (
         <motion.div

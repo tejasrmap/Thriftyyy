@@ -29,32 +29,49 @@ const PageLoader = () => (
 
 function MainLayout() {
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans selection:bg-white selection:text-black antialiased">
+    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans selection:bg-black selection:text-white antialiased">
       <Navbar />
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full pt-20">
         <Outlet />
       </main>
-      <footer className="py-24 bg-[#050510] border-t border-white/[0.03]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-10">
-          <div className="flex flex-col items-center md:items-start gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white text-black flex items-center justify-center font-black text-2xl rounded-xl shadow-2xl">
-                T
-              </div>
-              <span className="font-bold text-2xl tracking-tighter glow-text">
+      <footer className="bg-white border-t border-black/[0.05] py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-32">
+            <div className="flex flex-col gap-6">
+              <span className="font-serif text-3xl tracking-tight text-black">
                 Thriftyy
               </span>
+              <p className="text-black/40 text-[13px] leading-relaxed max-w-xs font-medium">
+                A digital archive of premium fashion circularity. Dedicated to the preservation of movement, style, and moment.
+              </p>
             </div>
-            <p className="text-white/40 text-sm max-w-xs text-center md:text-left font-medium leading-relaxed">
-              Elevating the rental experience through curated designer collections and seamless circular fashion.
-            </p>
+            
+            <div className="flex flex-col gap-8">
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/20">Archive</h4>
+              <nav className="flex flex-col gap-4">
+                <Link to="/browse" className="text-[13px] font-bold hover:text-black/40 transition-colors">The Collection</Link>
+                <Link to="/browse?category=wedding" className="text-[13px] font-bold hover:text-black/40 transition-colors">Evening Wear</Link>
+                <Link to="/browse?category=casual" className="text-[13px] font-bold hover:text-black/40 transition-colors">Daily Curations</Link>
+              </nav>
+            </div>
+
+            <div className="flex flex-col gap-8">
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/20">Identity</h4>
+              <nav className="flex flex-col gap-4">
+                <a href="#" className="text-[13px] font-bold hover:text-black/40 transition-colors">About the Studio</a>
+                <a href="#" className="text-[13px] font-bold hover:text-black/40 transition-colors">Sustainability Report</a>
+                <a href="#" className="text-[13px] font-bold hover:text-black/40 transition-colors">Stylist Circle</a>
+              </nav>
+            </div>
           </div>
-          <div className="flex flex-col items-center md:items-end gap-2">
-            <div className="text-white/80 font-bold text-sm tracking-widest uppercase">
-              © 2026 Thriftyy Official
+          
+          <div className="mt-24 pt-8 border-t border-black/[0.05] flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="text-black/20 text-[10px] font-bold uppercase tracking-[0.2em]">
+              © 2026 Thriftyy Official Archive
             </div>
-            <div className="text-white/30 text-xs font-medium">
-              Premium Clothing Rental • Built for Excellence
+            <div className="flex gap-8">
+              <a href="#" className="text-black/20 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-black transition-colors">Privacy</a>
+              <a href="#" className="text-black/20 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-black transition-colors">Terms</a>
             </div>
           </div>
         </div>

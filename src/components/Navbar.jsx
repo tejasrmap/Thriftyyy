@@ -10,23 +10,18 @@ export function Navbar() {
   const isCurrent = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-6 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
-      <div className="glass rounded-[2rem] px-6 py-3 flex items-center gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.3)] pointer-events-auto transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.4)] hover:bg-white/[0.05]">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 bg-white text-black flex items-center justify-center font-black text-xl rounded-xl transition-all group-hover:scale-110 group-hover:rotate-3 shadow-xl">
-            T
-          </div>
-          <span className="font-bold text-lg tracking-tight hidden sm:block">
+    <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/[0.05]">
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2 group transition-all">
+          <span className="font-serif text-3xl tracking-tight text-black group-hover:opacity-60 transition-opacity">
             Thriftyy
           </span>
         </Link>
 
-        <div className="h-6 w-px bg-white/10 hidden md:block"></div>
-
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-8">
           <Link
             to="/browse"
-            className={`text-sm font-semibold transition-all px-4 py-2 rounded-full ${isCurrent("/browse") ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+            className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-all ${isCurrent("/browse") ? "text-black underline underline-offset-8" : "text-black/40 hover:text-black"}`}
           >
             Collection
           </Link>
@@ -35,36 +30,42 @@ export function Navbar() {
             <>
               <Link
                 to="/dashboard"
-                className={`text-sm font-semibold transition-all px-4 py-2 rounded-full ${isCurrent("/dashboard") ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+                className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-all ${isCurrent("/dashboard") ? "text-black underline underline-offset-8" : "text-black/40 hover:text-black"}`}
               >
-                Bookings
+                Archive
               </Link>
               {role === "admin" && (
                 <Link
                   to="/admin"
-                  className={`text-sm font-semibold transition-all px-4 py-2 rounded-full ${isCurrent("/admin") ? "bg-white text-black shadow-lg" : "text-white/30 hover:text-white hover:bg-white/5"}`}
+                  className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-all ${isCurrent("/admin") ? "text-black underline underline-offset-8" : "text-black/20 hover:text-black"}`}
                 >
                   Admin
                 </Link>
               )}
-              <div className="flex items-center gap-2 pl-4 ml-2 border-l border-white/10">
+              <div className="flex items-center gap-2 ml-4 pl-4 border-l border-black/10">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={logOut}
-                  className="text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all"
+                  className="w-8 h-8 text-black/20 hover:text-black hover:bg-black/5 rounded-full transition-all"
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
               </div>
             </>
           ) : (
-            <div className="pl-4 ml-2 border-l border-white/10">
+            <div className="flex items-center gap-6 pl-8 ml-4 border-l border-black/5">
               <Link
                 to="/signin"
-                className="text-sm font-bold bg-white text-black hover:bg-white/90 px-6 py-2 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95 whitespace-nowrap block"
+                className="text-[11px] font-bold uppercase tracking-[0.2em] text-black/40 hover:text-black transition-colors"
               >
                 Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className="text-[11px] font-bold uppercase tracking-[0.2em] bg-black text-white px-6 py-3 rounded-md hover:bg-zinc-800 transition-all shadow-sm"
+              >
+                Join
               </Link>
             </div>
           )}

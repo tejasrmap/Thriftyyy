@@ -7,54 +7,49 @@ import { cn } from "../lib/utils";
 export function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Cinematic Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div className="absolute inset-0 bg-[#020205]" />
-        
-        {/* Animated Background Orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[150px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/10 blur-[150px] animate-pulse" style={{ animationDelay: '2s' }} />
-
-        {/* Hero Image - High Impact */}
+      {/* Atelier Minimal Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#FCFCFC] pt-20 border-b border-black/[0.03]">
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FCFCFC] via-[#FCFCFC]/80 to-transparent z-10" />
           <img 
-            src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=2000&auto=format&fit=crop"
-            className="w-full h-full object-cover opacity-30 mix-blend-overlay grayscale sm:grayscale-0"
-            alt="Hero Background"
+            src="https://images.unsplash.com/photo-1490481651871-ab68624d5517?q=80&w=2000&auto=format&fit=crop"
+            className="w-full h-full object-cover grayscale opacity-20"
+            alt="Atelier Background"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020205]/80 via-transparent to-[#020205]" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <div className="max-w-7xl mx-auto px-6 relative z-20 w-full">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
+            className="max-w-3xl"
           >
-            <div className="inline-flex items-center px-4 py-2 rounded-full glass border-white/10 text-xs font-bold uppercase tracking-[0.3em] mb-10 text-white/60 glow-text">
-              <Sparkles className="w-3 h-3 mr-2" /> Premiere Digital Boutique
-            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-black/30 mb-8 block">
+              Curated Circularity • Series 01
+            </span>
             
-            <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter leading-[0.85] mb-12 uppercase italic">
-              Own the <span className="text-white/20 hover:text-white transition-colors duration-700">Moment</span> <br />
-              <span className="glow-text">Rent the Look</span>
+            <h1 className="font-serif text-5xl md:text-8xl tracking-tight text-black leading-[1.05] mb-10">
+              Preserving <br />
+              <span className="italic">the movement</span> <br />
+              of luxury.
             </h1>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+            <p className="text-black/40 text-lg md:text-xl font-medium max-w-lg leading-relaxed mb-16 tracking-tight">
+              A digital archive for the intentional wardrobe. Access premium garments through our curated peer-to-peer rental studio.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-10">
               <Link
                 to="/browse"
-                className="group relative overflow-hidden bg-white text-black px-12 py-5 rounded-2xl font-black text-xl transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(255,255,255,0.15)]"
+                className="bg-black text-white px-12 py-5 rounded-md font-bold text-sm uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-xl"
               >
-                <span className="relative z-10 flex items-center gap-3">
-                  Start Exploring <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-2" />
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                Enter the Collection
               </Link>
               
-              <div className="flex items-center gap-4 text-white/40 font-bold tracking-widest text-xs uppercase">
-                <span className="w-8 h-px bg-white/20"></span>
-                Trusted by 5,000+ Stylists
-                <span className="w-8 h-px bg-white/20"></span>
+              <div className="flex items-center gap-4 text-black/20 text-[10px] font-bold uppercase tracking-[0.2em]">
+                <span className="w-8 h-px bg-black/10"></span>
+                International Archive
               </div>
             </div>
           </motion.div>
