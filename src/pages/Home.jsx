@@ -7,54 +7,54 @@ import { cn } from "../lib/utils";
 export function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary/50 via-background to-background -z-10" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-[url('https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center mix-blend-multiply opacity-20 md:opacity-[0.85] rounded-bl-[120px] pointer-events-none" />
+      {/* Cinematic Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div className="absolute inset-0 bg-[#020205]" />
+        
+        {/* Animated Background Orbs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[150px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/10 blur-[150px] animate-pulse" style={{ animationDelay: '2s' }} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+        {/* Hero Image - High Impact */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=2000&auto=format&fit=crop"
+            className="w-full h-full object-cover opacity-30 mix-blend-overlay grayscale sm:grayscale-0"
+            alt="Hero Background"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#020205]/80 via-transparent to-[#020205]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="pt-10 md:pt-20"
+            transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
           >
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-secondary border border-border/60 text-sm font-medium mb-8 shadow-sm">
-              <Sparkles className="w-4 h-4 mr-2 text-foreground/70" /> Premium Designer Rentals
+            <div className="inline-flex items-center px-4 py-2 rounded-full glass border-white/10 text-xs font-bold uppercase tracking-[0.3em] mb-10 text-white/60 glow-text">
+              <Sparkles className="w-3 h-3 mr-2" /> Premiere Digital Boutique
             </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6 text-foreground">
-              Own the moment, <br />
-              <span className="text-muted-foreground font-semibold">rent the look.</span>
+            
+            <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter leading-[0.85] mb-12 uppercase italic">
+              Own the <span className="text-white/20 hover:text-white transition-colors duration-700">Moment</span> <br />
+              <span className="glow-text">Rent the Look</span>
             </h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed font-medium">
-              Access thousands of high-end authentic designer pieces for a
-              fraction of the retail price. Delivered to your door.
-            </p>
-            <div className="flex flex-wrap items-center gap-6">
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
               <Link
                 to="/browse"
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "rounded-full px-8 text-base h-14 shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5",
-                )}
+                className="group relative overflow-hidden bg-white text-black px-12 py-5 rounded-2xl font-black text-xl transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(255,255,255,0.15)]"
               >
-                Explore Collection <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
-              <div className="flex items-center -space-x-3 pl-2">
-                {[...Array(4)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-11 h-11 rounded-full border-[3px] border-background bg-secondary overflow-hidden shadow-sm"
-                  >
-                    <img
-                      src={`https://i.pravatar.cc/100?img=${i + 10}`}
-                      alt="User"
-                    />
-                  </div>
-                ))}
-                <span className="pl-5 text-sm font-semibold text-muted-foreground">
-                  Loved by 10k+
+                <span className="relative z-10 flex items-center gap-3">
+                  Start Exploring <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-2" />
                 </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-white opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Link>
+              
+              <div className="flex items-center gap-4 text-white/40 font-bold tracking-widest text-xs uppercase">
+                <span className="w-8 h-px bg-white/20"></span>
+                Trusted by 5,000+ Stylists
+                <span className="w-8 h-px bg-white/20"></span>
               </div>
             </div>
           </motion.div>

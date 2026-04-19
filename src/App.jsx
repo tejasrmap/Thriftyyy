@@ -29,23 +29,33 @@ const PageLoader = () => (
 
 function MainLayout() {
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans tracking-tight selection:bg-black selection:text-white">
+    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans selection:bg-white selection:text-black antialiased">
       <Navbar />
-      <main className="flex-1 w-full pt-16">
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
-      <footer className="border-t py-16 bg-card mt-auto transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-3 opacity-90 hover:opacity-100 transition-opacity">
-            <div className="w-9 h-9 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl rounded-lg shadow-sm">
-              T
+      <footer className="py-24 bg-[#050510] border-t border-white/[0.03]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-10">
+          <div className="flex flex-col items-center md:items-start gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white text-black flex items-center justify-center font-black text-2xl rounded-xl shadow-2xl">
+                T
+              </div>
+              <span className="font-bold text-2xl tracking-tighter glow-text">
+                Thriftyy
+              </span>
             </div>
-            <span className="font-semibold text-lg tracking-tight text-foreground">
-              Thriftyy
-            </span>
+            <p className="text-white/40 text-sm max-w-xs text-center md:text-left font-medium leading-relaxed">
+              Elevating the rental experience through curated designer collections and seamless circular fashion.
+            </p>
           </div>
-          <div className="text-sm text-muted-foreground font-medium">
-            © 2026 Thriftyy. Premium Clothing Rental. Built for Final Project.
+          <div className="flex flex-col items-center md:items-end gap-2">
+            <div className="text-white/80 font-bold text-sm tracking-widest uppercase">
+              © 2026 Thriftyy Official
+            </div>
+            <div className="text-white/30 text-xs font-medium">
+              Premium Clothing Rental • Built for Excellence
+            </div>
           </div>
         </div>
       </footer>

@@ -41,114 +41,106 @@ export function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-foreground/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-foreground/5 blur-[120px]" />
+    <div className="min-h-screen bg-[#020205] flex flex-col justify-center py-20 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Cinematic Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-blue-600/10 blur-[180px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-600/10 blur-[180px] animate-pulse" style={{ animationDelay: '3s' }} />
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <Link to="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-8 transition-colors">
-          <ChevronLeft className="w-4 h-4 mr-1" />
+        <Link to="/" className="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white/30 hover:text-white mb-12 transition-all group">
+          <ChevronLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
           Back to home
         </Link>
-        <div className="flex justify-center">
-          <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center font-bold text-2xl rounded-xl shadow-lg">
+        <div className="flex justify-center mb-8">
+          <div className="w-16 h-16 bg-white text-black flex items-center justify-center font-black text-3xl rounded-[20px] shadow-[0_20px_50px_rgba(255,255,255,0.15)]">
             T
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground tracking-tight">
-          Welcome back
+        <h2 className="text-center text-4xl font-black text-white tracking-tighter glow-text">
+          Welcome Back
         </h2>
-        <p className="mt-2 text-center text-sm text-muted-foreground font-medium">
-          Enter your details to access your account
+        <p className="mt-4 text-center text-sm text-white/40 font-bold tracking-widest uppercase">
+          Access your digital boutique
         </p>
       </div>
 
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 max-w-sm px-4 sm:px-0"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+        className="mt-12 sm:mx-auto sm:w-full sm:max-w-md relative z-10 max-w-sm px-4 sm:px-0"
       >
-        <div className="bg-card py-8 px-6 shadow-[0_8px_40px_rgba(0,0,0,0.08)] sm:rounded-[32px] sm:px-10 border border-border/50">
+        <div className="glass-card py-10 px-8 sm:px-12">
           {error && (
-            <div className="mb-6 p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium animate-in fade-in slide-in-from-top-2">
+            <div className="mb-8 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-black uppercase tracking-widest text-center animate-in fade-in zoom-in-95 duration-500">
               {error}
             </div>
           )}
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-8" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="email" className="font-semibold text-foreground">Email address</Label>
-              <div className="mt-2">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 bg-secondary/50 rounded-xl px-4 border-border/60 focus:border-foreground transition-colors"
-                  placeholder="name@example.com"
-                />
-              </div>
+              <Label htmlFor="email" className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-3 block">Email Address</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-14 bg-white/5 border-white/5 rounded-2xl px-5 text-white focus:bg-white/10 focus:border-white/20 transition-all font-bold"
+                placeholder="name@example.com"
+              />
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="font-semibold text-foreground">Password</Label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-muted-foreground hover:text-foreground transition-colors">
-                    Forgot password?
-                  </a>
-                </div>
+              <div className="flex items-center justify-between mb-3">
+                <Label htmlFor="password" className="text-[10px] font-black uppercase tracking-widest text-white/40">Password</Label>
+                <a href="#" className="text-[10px] font-black underline uppercase tracking-widest text-white/20 hover:text-white transition-colors">
+                  Forgot?
+                </a>
               </div>
-              <div className="mt-2">
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 bg-secondary/50 rounded-xl px-4 border-border/60 focus:border-foreground transition-colors"
-                  placeholder="••••••••"
-                />
-              </div>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="h-14 bg-white/5 border-white/5 rounded-2xl px-5 text-white focus:bg-white/10 focus:border-white/20 transition-all font-bold"
+                placeholder="••••••••"
+              />
             </div>
 
-            <div>
-              <Button 
-                type="submit" 
-                className="w-full h-12 rounded-xl text-base font-semibold shadow-md hover:-translate-y-0.5 transition-all mt-2"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign in"}
-              </Button>
-            </div>
+            <Button 
+              type="submit" 
+              className="w-full h-14 rounded-2xl text-base font-black bg-white text-black hover:bg-white/90 shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] mt-4"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : "Sign In"}
+            </Button>
           </form>
 
-          <div className="mt-8">
+          <div className="mt-12">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border/60" />
+                <div className="w-full border-t border-white/5" />
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-muted-foreground font-medium">
-                  Or continue with
+              <div className="relative flex justify-center text-[10px]">
+                <span className="px-4 bg-transparent text-white/20 font-black uppercase tracking-widest">
+                  Secure Identity
                 </span>
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-8">
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleGoogleSignIn}
-                className="w-full h-12 rounded-xl text-base font-semibold shadow-sm hover:-translate-y-0.5 transition-all text-foreground border-border/60"
+                className="w-full h-14 rounded-2xl text-sm font-bold bg-white/5 text-white border-white/10 hover:bg-white/10 transition-all hover:-translate-y-1"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -156,21 +148,19 @@ export function SignIn() {
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                Google
+                Sign In with Google
               </Button>
             </div>
           </div>
 
-          <div className="mt-8">
-            <div className="mt-6 text-center">
-              <span className="text-muted-foreground mr-1">Don't have an account?</span>
-              <Link
-                to="/signup"
-                className="text-foreground font-bold hover:underline decoration-2 underline-offset-4 transition-all"
-              >
-                Sign up
-              </Link>
-            </div>
+          <div className="mt-12 text-center">
+            <span className="text-white/20 text-xs font-bold mr-2 uppercase tracking-widest">New here?</span>
+            <Link
+              to="/signup"
+              className="text-white text-xs font-black uppercase tracking-[0.2em] hover:glow-text transition-all underline decoration-white/20 underline-offset-8"
+            >
+              Request Access
+            </Link>
           </div>
         </div>
       </motion.div>

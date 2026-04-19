@@ -10,70 +10,64 @@ export function Navbar() {
   const isCurrent = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 bg-background/70 backdrop-blur-xl border-b border-border/40 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl rounded-lg shadow-sm group-hover:shadow-md transition-all group-hover:-translate-y-0.5">
-              T
-            </div>
-            <span className="font-bold text-xl tracking-tight hidden sm:block text-foreground">
-              Thriftyy
-            </span>
+    <nav className="fixed top-6 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+      <div className="glass rounded-[2rem] px-6 py-3 flex items-center gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.3)] pointer-events-auto transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.4)] hover:bg-white/[0.05]">
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="w-9 h-9 bg-white text-black flex items-center justify-center font-black text-xl rounded-xl transition-all group-hover:scale-110 group-hover:rotate-3 shadow-xl">
+            T
+          </div>
+          <span className="font-bold text-lg tracking-tight hidden sm:block">
+            Thriftyy
+          </span>
+        </Link>
+
+        <div className="h-6 w-px bg-white/10 hidden md:block"></div>
+
+        <div className="flex items-center gap-1">
+          <Link
+            to="/browse"
+            className={`text-sm font-semibold transition-all px-4 py-2 rounded-full ${isCurrent("/browse") ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+          >
+            Collection
           </Link>
 
-          <div className="flex items-center gap-2 sm:gap-4">
-            <Link
-              to="/browse"
-              className={`text-sm font-medium transition-all px-3 py-2 rounded-md ${isCurrent("/browse") ? "text-foreground bg-secondary/80 shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"}`}
-            >
-              Collection
-            </Link>
-
-            {user ? (
-              <>
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className={`text-sm font-semibold transition-all px-4 py-2 rounded-full ${isCurrent("/dashboard") ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+              >
+                Bookings
+              </Link>
+              {role === "admin" && (
                 <Link
-                  to="/dashboard"
-                  className={`text-sm font-medium transition-all px-3 py-2 rounded-md ${isCurrent("/dashboard") ? "text-foreground bg-secondary/80 shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"}`}
+                  to="/admin"
+                  className={`text-sm font-semibold transition-all px-4 py-2 rounded-full ${isCurrent("/admin") ? "bg-white text-black shadow-lg" : "text-white/30 hover:text-white hover:bg-white/5"}`}
                 >
-                  Bookings
+                  Admin
                 </Link>
-                {role === "admin" && (
-                  <Link
-                    to="/admin"
-                    className={`text-sm font-medium transition-all px-3 py-2 rounded-md ${isCurrent("/admin") ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 shadow-sm" : "text-blue-600/70 hover:text-blue-600 hover:bg-blue-50/50 dark:hover:bg-blue-900/10"}`}
-                  >
-                    Admin Panel
-                  </Link>
-                )}
-                <div className="h-4 w-px bg-border mx-2 hidden sm:block"></div>
-                <div className="flex items-center gap-2 sm:gap-3 pl-2">
-                  <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-secondary-foreground bg-secondary py-1.5 px-3 rounded-full shadow-sm border border-border/50">
-                    <UserCircle className="w-4 h-4 opacity-70" />
-                    <span className="max-w-[100px] truncate">{user.email}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={logOut}
-                    title="Sign Out"
-                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <div className="flex items-center gap-4 pl-4 border-l border-border/40">
-                <Link
-                  to="/signin"
-                  className="inline-flex items-center justify-center whitespace-nowrap bg-primary text-primary-foreground h-10 rounded-full px-6 font-medium shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+              )}
+              <div className="flex items-center gap-2 pl-4 ml-2 border-l border-white/10">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={logOut}
+                  className="text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all"
                 >
-                  Sign In
-                </Link>
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
-            )}
-          </div>
+            </>
+          ) : (
+            <div className="pl-4 ml-2 border-l border-white/10">
+              <Link
+                to="/signin"
+                className="text-sm font-bold bg-white text-black hover:bg-white/90 px-6 py-2 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95 whitespace-nowrap block"
+              >
+                Sign In
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>

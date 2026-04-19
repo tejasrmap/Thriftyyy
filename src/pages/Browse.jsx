@@ -38,99 +38,94 @@ export function Browse() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-        <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground mb-2">
-            The Collection
-          </h1>
-          <p className="text-lg text-muted-foreground font-medium">
-            Discover our curated selection of designer pieces.
-          </p>
+    <div className="max-w-[1600px] mx-auto px-6 py-24">
+      <header className="mb-24 text-center">
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="inline-flex items-center px-4 py-2 rounded-full glass border-white/5 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 text-white/50"
+        >
+          Curated Showcase
+        </motion.div>
+        <h1 className="text-6xl md:text-8xl font-black tracking-tighter glow-text mb-6">
+          The <span className="text-white/20 italic">Collection</span>
+        </h1>
+        <div className="flex justify-center mt-12 overflow-x-auto pb-4 hide-scrollbar">
+          <div className="glass p-1.5 rounded-full flex gap-1">
+            {["all", "wedding", "party", "casual", "formal"].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-500 ${
+                  filter === cat
+                    ? "bg-white text-black shadow-2xl scale-105"
+                    : "text-white/40 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
-
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-          {["all", "wedding", "party", "casual", "formal"].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-6 py-2.5 rounded-full text-sm font-semibold capitalize whitespace-nowrap transition-all duration-300 ${
-                filter === cat
-                  ? "bg-primary text-primary-foreground shadow-md -translate-y-0.5"
-                  : "bg-background text-muted-foreground border border-border/60 hover:border-border hover:text-foreground hover:bg-secondary/50"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full shrink-0 ml-2"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+      </header>
 
       <motion.div
         layout
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-20"
       >
         <AnimatePresence>
           {filteredClothes.map((cloth, idx) => (
             <motion.div
               key={cloth.id}
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3, delay: idx * 0.05 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.8, delay: idx * 0.05, ease: [0.23, 1, 0.32, 1] }}
             >
-              <Link to={`/cloth/${cloth.id}`} className="group block h-full">
-                <Card className="overflow-hidden border-transparent bg-transparent shadow-none h-full flex flex-col group">
-                  <div className="aspect-[3/4] relative rounded-3xl overflow-hidden bg-secondary mb-5 shadow-sm group-hover:shadow-md transition-shadow">
-                    <img
-                      src={cloth.imageUrl}
-                      alt={cloth.title}
-                      className="object-cover w-full h-full transition-transform duration-[1.5s] group-hover:scale-[1.03] ease-out"
-                      referrerPolicy="no-referrer"
-                    />
-
-                    {!cloth.availability && (
-                      <div className="absolute inset-0 bg-background/60 backdrop-blur-md flex items-center justify-center transition-opacity">
-                        <Badge
-                          variant="secondary"
-                          className="px-4 py-1.5 text-sm font-bold bg-background text-foreground drop-shadow-sm border border-border/50 uppercase tracking-widest"
-                        >
-                          Currently Rented
-                        </Badge>
-                      </div>
-                    )}
-                    <div className="absolute top-4 left-4">
-                      <Badge
-                        variant="secondary"
-                        className="bg-background/90 backdrop-blur-xl text-foreground capitalize drop-shadow-sm border border-border/30 shadow-sm px-3 py-1 font-semibold"
-                      >
-                        {cloth.category}
-                      </Badge>
+              <Link to={`/cloth/${cloth.id}`} className="group block">
+                <div className="boutique-card aspect-[3/4.5] mb-8 relative">
+                  {/* Floating Price Tag */}
+                  <div className="absolute top-6 right-6 z-20">
+                    <div className="glass px-5 py-2.5 rounded-2xl font-black text-lg border-white/10 shadow-2xl transition-transform group-hover:scale-110 group-hover:-rotate-3">
+                      ${cloth.pricePerDay}
                     </div>
                   </div>
-                  <CardContent className="p-0 flex-1 flex flex-col px-1">
-                    <h3 className="text-lg font-bold text-foreground transition-colors line-clamp-1 decoration-2 underline-offset-4 group-hover:underline">
+
+                  {/* Availability Overlay */}
+                  {!cloth.availability && (
+                    <div className="absolute inset-0 z-30 flex items-center justify-center p-6 text-center">
+                      <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
+                      <span className="relative text-xs font-black uppercase tracking-[0.3em] border-2 border-white/20 px-6 py-3 rounded-full">
+                        Fully Booked
+                      </span>
+                    </div>
+                  )}
+
+                  <img
+                    src={cloth.imageUrl}
+                    alt={cloth.title}
+                    className="w-full h-full object-cover transition-all duration-[2s] group-hover:scale-110 group-hover:rotate-2 brightness-75 group-hover:brightness-100"
+                    referrerPolicy="no-referrer"
+                  />
+                  
+                  {/* Bottom Vignette */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                </div>
+
+                <div className="px-2">
+                  <div className="flex items-center justify-between gap-4 mb-2">
+                    <h3 className="text-2xl font-bold tracking-tight group-hover:glow-text transition-all duration-500">
                       {cloth.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed font-medium">
-                      {cloth.description}
-                    </p>
-                    <div className="mt-auto pt-4 flex items-baseline font-semibold">
-                      <span className="text-xl text-foreground tracking-tight">
-                        ${cloth.pricePerDay}
-                      </span>
-                      <span className="text-muted-foreground text-sm ml-1 font-medium">/ day</span>
-                    </div>
-                  </CardContent>
-                </Card>
+                    <span className="text-[10px] uppercase font-black tracking-widest text-white/30 border border-white/10 px-3 py-1 rounded-full whitespace-nowrap">
+                      {cloth.category}
+                    </span>
+                  </div>
+                  <p className="text-white/40 text-sm font-medium line-clamp-1 group-hover:text-white/60 transition-colors">
+                    {cloth.description}
+                  </p>
+                </div>
               </Link>
             </motion.div>
           ))}
