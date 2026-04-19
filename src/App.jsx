@@ -4,7 +4,7 @@
  */
 
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Navbar } from "./components/Navbar";
@@ -34,45 +34,23 @@ function MainLayout() {
       <main className="flex-1 w-full pt-20">
         <Outlet />
       </main>
-      <footer className="bg-white border-t border-black/[0.05] py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-32">
-            <div className="flex flex-col gap-6">
-              <span className="font-serif text-3xl tracking-tight text-black">
-                Thriftyy
-              </span>
-              <p className="text-black/40 text-[13px] leading-relaxed max-w-xs font-medium">
-                A digital archive of premium fashion circularity. Dedicated to the preservation of movement, style, and moment.
-              </p>
+      <footer className="bg-white border-t border-black/[0.05] py-20">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-bold text-lg rounded-lg">
+              T
             </div>
-            
-            <div className="flex flex-col gap-8">
-              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/20">Archive</h4>
-              <nav className="flex flex-col gap-4">
-                <Link to="/browse" className="text-[13px] font-bold hover:text-black/40 transition-colors">The Collection</Link>
-                <Link to="/browse?category=wedding" className="text-[13px] font-bold hover:text-black/40 transition-colors">Evening Wear</Link>
-                <Link to="/browse?category=casual" className="text-[13px] font-bold hover:text-black/40 transition-colors">Daily Curations</Link>
-              </nav>
-            </div>
-
-            <div className="flex flex-col gap-8">
-              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/20">Identity</h4>
-              <nav className="flex flex-col gap-4">
-                <a href="#" className="text-[13px] font-bold hover:text-black/40 transition-colors">About the Studio</a>
-                <a href="#" className="text-[13px] font-bold hover:text-black/40 transition-colors">Sustainability Report</a>
-                <a href="#" className="text-[13px] font-bold hover:text-black/40 transition-colors">Stylist Circle</a>
-              </nav>
-            </div>
+            <span className="font-bold text-xl tracking-tighter text-black">
+              Thriftyy
+            </span>
           </div>
-          
-          <div className="mt-24 pt-8 border-t border-black/[0.05] flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-black/20 text-[10px] font-bold uppercase tracking-[0.2em]">
-              © 2026 Thriftyy Official Archive
-            </div>
-            <div className="flex gap-8">
-              <a href="#" className="text-black/20 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-black transition-colors">Privacy</a>
-              <a href="#" className="text-black/20 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-black transition-colors">Terms</a>
-            </div>
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <Link to="/browse" className="text-xs font-bold uppercase tracking-widest text-black/40 hover:text-black">Collection</Link>
+            <a href="#" className="text-xs font-bold uppercase tracking-widest text-black/40 hover:text-black">Privacy</a>
+            <a href="#" className="text-xs font-bold uppercase tracking-widest text-black/40 hover:text-black">Terms</a>
+          </div>
+          <div className="text-black/20 text-[10px] font-bold uppercase tracking-[0.2em]">
+            © 2026 Thriftyy Official Archive
           </div>
         </div>
       </footer>

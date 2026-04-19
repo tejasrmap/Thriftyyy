@@ -12,8 +12,11 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/[0.05]">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group transition-all">
-          <span className="font-serif text-3xl tracking-tight text-black group-hover:opacity-60 transition-opacity">
+        <Link to="/" className="flex items-center gap-3 group transition-all">
+          <div className="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-xl rounded-xl">
+            T
+          </div>
+          <span className="font-bold text-2xl tracking-tighter text-black">
             Thriftyy
           </span>
         </Link>
@@ -21,7 +24,7 @@ export function Navbar() {
         <div className="flex items-center gap-8">
           <Link
             to="/browse"
-            className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-all ${isCurrent("/browse") ? "text-black underline underline-offset-8" : "text-black/40 hover:text-black"}`}
+            className={`text-xs font-bold uppercase tracking-widest transition-all ${isCurrent("/browse") ? "text-black border-b-2 border-black pb-1" : "text-black/40 hover:text-black"}`}
           >
             Collection
           </Link>
@@ -30,14 +33,14 @@ export function Navbar() {
             <>
               <Link
                 to="/dashboard"
-                className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-all ${isCurrent("/dashboard") ? "text-black underline underline-offset-8" : "text-black/40 hover:text-black"}`}
+                className={`text-xs font-bold uppercase tracking-widest transition-all ${isCurrent("/dashboard") ? "text-black border-b-2 border-black pb-1" : "text-black/40 hover:text-black"}`}
               >
                 Archive
               </Link>
               {role === "admin" && (
                 <Link
                   to="/admin"
-                  className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-all ${isCurrent("/admin") ? "text-black underline underline-offset-8" : "text-black/20 hover:text-black"}`}
+                  className={`text-xs font-bold uppercase tracking-widest transition-all ${isCurrent("/admin") ? "text-black border-b-2 border-black pb-1" : "text-black/20 hover:text-black"}`}
                 >
                   Admin
                 </Link>
@@ -54,18 +57,18 @@ export function Navbar() {
               </div>
             </>
           ) : (
-            <div className="flex items-center gap-6 pl-8 ml-4 border-l border-black/5">
+            <div className="flex items-center gap-6 pl-8 ml-4 border-l border-black/10">
               <Link
                 to="/signin"
-                className="text-[11px] font-bold uppercase tracking-[0.2em] text-black/40 hover:text-black transition-colors"
+                className="text-xs font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 to="/signup"
-                className="text-[11px] font-bold uppercase tracking-[0.2em] bg-black text-white px-6 py-3 rounded-md hover:bg-zinc-800 transition-all shadow-sm"
+                className="text-xs font-bold uppercase tracking-widest bg-black text-white px-7 py-3 rounded-full hover:bg-zinc-800 transition-all shadow-sm"
               >
-                Join
+                Join Circle
               </Link>
             </div>
           )}

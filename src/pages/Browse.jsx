@@ -38,61 +38,67 @@ export function Browse() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-24">
-      <header className="mb-24">
-        <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-black/20 mb-6 block">
-          Archival Series • Digital Studio
-        </span>
-        <h1 className="font-serif text-5xl md:text-7xl tracking-tight text-black mb-12">
-          The Collection
-        </h1>
-        
-        <div className="flex flex-wrap items-center gap-4 border-b border-black/[0.05] pb-10">
-          {["all", "wedding", "party", "casual", "formal"].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-8 py-3 rounded-[4px] text-[10px] font-bold uppercase tracking-[0.2em] transition-all ${
-                filter === cat
-                  ? "bg-black text-white"
-                  : "text-black/40 hover:text-black hover:bg-black/5"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+    <div className="max-w-7xl mx-auto px-6 py-20 relative">
+      <header className="mb-20">
+        <motion.div
+           initial={{ opacity: 0, y: 10 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-4 block"
+        >
+          Curated Catalog
+        </motion.div>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-black">
+            The Collection
+          </h1>
+          
+          <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 hide-scrollbar">
+            {["all", "wedding", "party", "casual", "formal"].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
+                  filter === cat
+                    ? "bg-black text-white shadow-lg"
+                    : "bg-zinc-100 text-zinc-400 hover:text-black hover:bg-zinc-200"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
       <motion.div
         layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12"
       >
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {filteredClothes.map((cloth, idx) => (
             <motion.div
               key={cloth.id}
               layout
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.6, delay: idx * 0.05, ease: [0.23, 1, 0.32, 1] }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.5, delay: idx * 0.05 }}
             >
               <Link to={`/cloth/${cloth.id}`} className="group block">
-                <div className="boutique-card aspect-[3/4] mb-6 relative">
-                  {/* Pinned Price Tag */}
+                <div className="boutique-card aspect-[3/4] mb-6 relative shadow-sm group-hover:boutique-card-hover">
+                  {/* Indigo Price Tag */}
                   <div className="absolute top-4 right-4 z-20">
-                    <div className="bg-white/90 backdrop-blur-md px-4 py-2 text-[13px] font-bold tracking-tight text-black border border-black/5 rounded-sm shadow-sm group-hover:scale-105 transition-transform">
-                      ${cloth.pricePerDay} / day
+                    <div className="bg-indigo-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-xl transition-transform group-hover:scale-110">
+                      ${cloth.pricePerDay}/day
                     </div>
                   </div>
 
-                  {/* Minimal Availability Overlay */}
+                  {/* Standard Availability Overlay */}
                   {!cloth.availability && (
                     <div className="absolute inset-0 z-30 flex items-center justify-center p-6 text-center">
                       <div className="absolute inset-0 bg-white/60 backdrop-blur-sm" />
-                      <span className="relative text-[10px] font-bold uppercase tracking-[0.3em] border border-black/10 px-6 py-3 rounded-sm text-black/40 bg-white shadow-sm">
-                        Reserved
+                      <span className="relative text-[10px] font-bold uppercase tracking-widest bg-zinc-100 px-5 py-2.5 rounded-full text-zinc-400 border border-black/5">
+                        Currently Rented
                       </span>
                     </div>
                   )}
@@ -100,21 +106,21 @@ export function Browse() {
                   <img
                     src={cloth.imageUrl}
                     alt={cloth.title}
-                    className="w-full h-full object-cover grayscale-[0.2] transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between gap-4">
-                    <h3 className="text-lg font-bold tracking-tight text-black group-hover:opacity-40 transition-opacity">
+                <div className="px-1">
+                  <div className="flex items-center justify-between gap-4 mb-1">
+                    <h3 className="text-xl font-bold tracking-tight text-black group-hover:text-indigo-600 transition-colors">
                       {cloth.title}
                     </h3>
-                    <span className="text-[9px] uppercase font-bold tracking-[0.2em] text-black/20 whitespace-nowrap">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-300">
                       {cloth.category}
                     </span>
                   </div>
-                  <p className="text-black/40 text-[13px] font-medium leading-relaxed line-clamp-1">
+                  <p className="text-zinc-400 text-sm font-medium line-clamp-1">
                     {cloth.description}
                   </p>
                 </div>
@@ -123,13 +129,11 @@ export function Browse() {
           ))}
         </AnimatePresence>
       </motion.div>
-    </div>
-
       {filteredClothes.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-24 bg-card rounded-[32px] border border-dashed border-border/60 mt-8 shadow-sm"
+          className="text-center py-24 bg-card rounded-[8px] border border-black/[0.05] mt-8 shadow-sm"
         >
           <Search className="w-12 h-12 text-muted-foreground/30 mx-auto mb-5" />
           <h3 className="text-xl font-bold text-foreground">No items found</h3>

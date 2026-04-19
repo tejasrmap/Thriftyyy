@@ -7,50 +7,60 @@ import { cn } from "../lib/utils";
 export function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Atelier Minimal Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#FCFCFC] pt-20 border-b border-black/[0.03]">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FCFCFC] via-[#FCFCFC]/80 to-transparent z-10" />
-          <img 
-            src="https://images.unsplash.com/photo-1490481651871-ab68624d5517?q=80&w=2000&auto=format&fit=crop"
-            className="w-full h-full object-cover grayscale opacity-20"
-            alt="Atelier Background"
-          />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 relative z-20 w-full">
+      {/* Thriftyy Light OG Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
-            className="max-w-3xl"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-black/30 mb-8 block">
-              Curated Circularity • Series 01
-            </span>
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-zinc-100 text-[10px] font-bold uppercase tracking-widest mb-8 text-zinc-500">
+              <Sparkles className="w-3 h-3 mr-2" /> Premium Designer Rentals
+            </div>
             
-            <h1 className="font-serif text-5xl md:text-8xl tracking-tight text-black leading-[1.05] mb-10">
-              Preserving <br />
-              <span className="italic">the movement</span> <br />
-              of luxury.
+            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-8 text-black">
+              Own the moment, <br />
+              <span className="text-zinc-400">rent the look.</span>
             </h1>
 
-            <p className="text-black/40 text-lg md:text-xl font-medium max-w-lg leading-relaxed mb-16 tracking-tight">
-              A digital archive for the intentional wardrobe. Access premium garments through our curated peer-to-peer rental studio.
+            <p className="text-zinc-500 text-lg md:text-xl font-medium max-w-lg leading-relaxed mb-12">
+              Access thousands of high-end and authentic designer pieces for a fraction of the retail price. Delivered to your door.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-10">
+            <div className="flex flex-col sm:flex-row items-center gap-6">
               <Link
                 to="/browse"
-                className="bg-black text-white px-12 py-5 rounded-md font-bold text-sm uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-xl"
+                className="group bg-black text-white px-10 py-5 rounded-full font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center gap-3"
               >
-                Enter the Collection
+                Explore Collection <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Link>
               
-              <div className="flex items-center gap-4 text-black/20 text-[10px] font-bold uppercase tracking-[0.2em]">
-                <span className="w-8 h-px bg-black/10"></span>
-                International Archive
+              <div className="flex items-center -space-x-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-zinc-200 overflow-hidden">
+                    <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="user" />
+                  </div>
+                ))}
+                <div className="pl-6 text-[11px] font-bold uppercase tracking-widest text-zinc-400">
+                  Loved by 10k+
+                </div>
               </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="hidden lg:block relative"
+          >
+            <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.1)]">
+              <img 
+                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000&auto=format&fit=crop"
+                className="w-full h-full object-cover"
+                alt="OG Style"
+              />
             </div>
           </motion.div>
         </div>
