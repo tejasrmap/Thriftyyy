@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/button";
 import { UserCircle, LogOut } from "lucide-react";
+import { motion } from "motion/react";
 
 export function Navbar() {
   const { user, role, logOut } = useAuth();
@@ -13,30 +14,41 @@ export function Navbar() {
     <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/[0.05]">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group transition-all">
-          <div className="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-xl rounded-xl">
+          <motion.div 
+            whileHover={{ scale: 1.1, rotate: -5 }}
+            className="w-9 h-9 bg-black text-white flex items-center justify-center font-extrabold text-xl rounded-xl"
+          >
             T
-          </div>
-          <span className="font-serif text-2xl tracking-[0.02em] text-black">
+          </motion.div>
+          <motion.span 
+            whileHover={{ letterSpacing: "0.05em" }}
+            className="font-display font-extrabold text-2xl tracking-architectural text-black uppercase transition-all"
+          >
             Thriftyy
-          </span>
+          </motion.span>
         </Link>
+        <div className="flex items-center gap-10">
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              to="/browse"
+              className="px-6 py-2.5 rounded-full border border-black/10 text-xs font-extrabold uppercase tracking-widest text-black hover:bg-black hover:text-white transition-all shadow-sm"
+            >
+              Collection
+            </Link>
+          </motion.div>
+        </div>
 
         <div className="flex items-center gap-8">
-          <Link
-            to="/browse"
-            className={`text-xs font-bold uppercase tracking-widest transition-all ${isCurrent("/browse") ? "text-black border-b-2 border-black pb-1" : "text-black/40 hover:text-black"}`}
-          >
-            Collection
-          </Link>
-
           {user ? (
             <>
-              <Link
-                to="/dashboard"
-                className={`text-xs font-bold uppercase tracking-widest transition-all ${isCurrent("/dashboard") ? "text-black border-b-2 border-black pb-1" : "text-black/40 hover:text-black"}`}
-              >
-                Archive
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/dashboard"
+                  className={`text-xs font-extrabold uppercase tracking-widest transition-all ${isCurrent("/dashboard") ? "text-black border-b-2 border-black pb-1" : "text-black/40 hover:text-black"}`}
+                >
+                  Archive
+                </Link>
+              </motion.div>
               {role === "admin" && (
                 <Link
                   to="/admin"

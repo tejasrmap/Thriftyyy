@@ -61,8 +61,8 @@ export function SignUp() {
             Thriftyy
           </span>
         </div>
-        <h2 className="text-center text-5xl font-serif text-black tracking-tight italic">
-          Join the <span className="not-italic">Circle</span>
+        <h2 className="text-center text-5xl font-display font-extrabold text-black tracking-tighter uppercase">
+          Join the Circle
         </h2>
         <p className="mt-4 text-center text-sm text-zinc-400 font-medium tracking-widest uppercase">
           Start your boutique experience

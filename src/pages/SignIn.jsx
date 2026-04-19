@@ -55,8 +55,8 @@ export function SignIn() {
             Thriftyy
           </span>
         </div>
-        <h2 className="text-center text-5xl font-serif text-black tracking-tight italic">
-          Welcome <span className="not-italic">Back</span>
+        <h2 className="text-center text-5xl font-display font-extrabold text-black tracking-tighter uppercase">
+          Welcome Back
         </h2>
         <p className="mt-4 text-center text-sm text-zinc-400 font-medium">
           AUTHORIZED STYLIST ACCESS ONLY

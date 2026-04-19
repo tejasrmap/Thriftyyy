@@ -48,8 +48,8 @@ export function Browse() {
           Curated Catalog
         </motion.div>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
-          <h1 className="font-serif text-5xl md:text-7xl tracking-tight text-black italic">
-            The <span className="not-italic">Collection</span>
+          <h1 className="font-display font-extrabold text-5xl md:text-8xl tracking-tighter text-black uppercase">
+            The Collection
           </h1>
           
           <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 hide-scrollbar">

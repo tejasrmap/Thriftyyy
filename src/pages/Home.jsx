@@ -18,11 +18,17 @@ export function Home() {
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-zinc-100 text-[10px] font-bold uppercase tracking-widest mb-8 text-zinc-500">
               <Sparkles className="w-3 h-3 mr-2" /> Premium Designer Rentals
             </div>
-            
-            <h1 className="font-serif text-6xl md:text-8xl tracking-tight leading-[1] mb-8 text-black italic">
-              Own the moment, <br />
-              <span className="text-zinc-400 not-italic">rent the look.</span>
-            </h1>
+            <div className="overflow-hidden">
+              <motion.h1 
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                className="font-display font-extrabold text-6xl md:text-[7.5rem] tracking-architectural leading-[0.85] mb-8 text-black uppercase"
+              >
+                Own the moment, <br />
+                <span className="text-zinc-400">rent the look.</span>
+              </motion.h1>
+            </div>
 
             <p className="text-zinc-500 text-lg md:text-xl font-medium max-w-lg leading-relaxed mb-12">
               Access thousands of high-end and authentic designer pieces for a fraction of the retail price. Delivered to your door.
