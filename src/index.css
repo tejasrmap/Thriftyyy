@@ -2,11 +2,12 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Modern Sans-Serif Import */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+/* Modern Typography Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
 
 @theme inline {
-    --font-sans: 'Outfit', sans-serif;
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Bodoni Moda', serif;
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -31,7 +32,7 @@
 }
 
 :root {
-    /* Thriftyy Light - Clean Modern Palette Restoration */
+    /* Thriftyy Light - Clean Modern Palette */
     --background: #FFFFFF;
     --foreground: #09090B;
     --card: #FFFFFF;
@@ -64,6 +65,10 @@
   html {
     @apply font-sans;
   }
+}
+
+@utility font-serif {
+  font-family: var(--font-serif);
 }
 
 @utility glass {

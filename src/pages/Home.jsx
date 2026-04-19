@@ -19,9 +19,9 @@ export function Home() {
               <Sparkles className="w-3 h-3 mr-2" /> Premium Designer Rentals
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-8 text-black">
+            <h1 className="font-serif text-6xl md:text-8xl tracking-tight leading-[1] mb-8 text-black italic">
               Own the moment, <br />
-              <span className="text-zinc-400">rent the look.</span>
+              <span className="text-zinc-400 not-italic">rent the look.</span>
             </h1>
 
             <p className="text-zinc-500 text-lg md:text-xl font-medium max-w-lg leading-relaxed mb-12">

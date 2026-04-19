@@ -16,7 +16,7 @@ export function Navbar() {
           <div className="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-xl rounded-xl">
             T
           </div>
-          <span className="font-bold text-2xl tracking-tighter text-black">
+          <span className="font-serif text-2xl tracking-[0.02em] text-black">
             Thriftyy
           </span>
         </Link>
