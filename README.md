@@ -1,4 +1,4 @@
-# 👗 Cloth Rental App (Thriftyyy)
+# Thriftyyy - A Cloth Rental App
 
 Thriftyyy is a full-stack web application that allows users to rent clothing for special occasions instead of purchasing expensive outfits.
 
@@ -144,12 +144,6 @@ bash cd server npm install npm start
 
 ### Frontend Setup
 bash cd client npm install npm run dev 
-
----
-
-## 🔐 Environment Variables
-
-env MONGO_URI=your_mongodb_connection_string JWT_SECRET=your_secret_key PORT=5000 CLOUDINARY_URL=your_cloudinary_config 
 
 ---
 
