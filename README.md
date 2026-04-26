@@ -1,7 +1,8 @@
-# 🛍️ Thriftyyy
+# 👗 Cloth Rental App (Thriftyyy)
 
-Thriftyyy is a full-stack thrift marketplace that allows users to buy and sell second-hand fashion items easily.  
-It promotes sustainable shopping, affordability, and smarter wardrobe management.
+Thriftyyy is a full-stack web application that allows users to rent clothing for special occasions instead of purchasing expensive outfits.
+
+It provides an efficient platform for browsing, booking, and managing rental clothing, while also enabling admins to manage inventory and bookings.
 
 ---
 
@@ -10,108 +11,177 @@ It promotes sustainable shopping, affordability, and smarter wardrobe management
 
 ---
 
-## 📌 Features
-
-- 👤 User Authentication
-  - Secure login & signup
-  - User session management
-
-- 🛒 Marketplace System
-  - Browse available thrift items
-  - View product details
-
-- 📤 Sell Your Items
-  - Upload product listings
-  - Add images, descriptions, and pricing
-
-- 🔍 Product Discovery
-  - Explore items by category
-  - Clean and responsive UI
-
-- ♻️ Sustainable Shopping
-  - Encourages reuse of fashion items
-  - Reduces clothing waste
-
----
-
 ## 🧠 Problem Statement
 
-Many people have unused clothes but no simple platform to resell them.  
-Existing platforms are either too generic or not focused on fashion.
+Many people prefer renting clothes for occasions like weddings or parties instead of buying expensive outfits. However, there is a lack of simple and efficient digital platforms to:
 
-Thriftyyy solves this by:
-- Creating a niche marketplace for thrift fashion
-- Making selling and buying simple and accessible
+- Browse available clothing  
+- Check availability for specific dates  
+- Rent items seamlessly  
+
+This application solves that problem by providing a structured rental system.
 
 ---
 
-## 🏗️ Tech Stack
+## 📌 Features
+
+### 👤 User Features
+- Register & Login (JWT Authentication)
+- Browse clothing catalog
+- Filter items by category (wedding, party, casual, etc.)
+- Check availability for selected dates
+- Rent outfits for a defined period
+- View booking history
+
+### 🛠️ Admin Features
+- Add / Edit / Delete clothing items
+- Manage inventory
+- Track bookings and returns
+- Monitor user activity
+
+---
+
+## 🔄 System Flow
+
+### User Flow
+1. Register / Login  
+2. Browse clothes  
+3. Select item  
+4. Check availability  
+5. Book item  
+6. (Optional) Payment  
+7. Confirmation  
+8. Return after usage  
+
+### Admin Flow
+- Manage clothing inventory  
+- Track bookings  
+- Update availability after returns  
+
+---
+
+## 🏗️ Architecture
+
+### 🔹 3-Tier Architecture
+- Frontend: React  
+- Backend: Node.js + Express  
+- Database: MongoDB  
+
+### 🔹 Backend Modules
+- Authentication (JWT, bcrypt)
+- Clothing API (/clothes)
+- Booking API (/bookings)
+- User API (/users)
+
+### 🔹 Core Logic
+- Booking management  
+- Date overlap checking  
+- Price calculation  
+- Inventory updates  
+
+---
+
+## 🗄️ Database Design
+
+### Users Collection
+- name  
+- email  
+- password  
+- role (user/admin)  
+
+### Clothes Collection
+- title  
+- description  
+- category  
+- size  
+- pricePerDay  
+- availability  
+- imageUrl  
+
+### Bookings Collection
+- userId  
+- clothId  
+- startDate  
+- endDate  
+- totalPrice  
+- status  
+
+### Payments (Optional)
+- userId  
+- bookingId  
+- amount  
+- paymentStatus  
+
+---
+
+## 🛠️ Tech Stack
 
 Frontend
-- React.js / Next.js  
-- Tailwind CSS  
+- React.js  
+- HTML, CSS, JavaScript  
 
 Backend
-- Supabase / Firebase (Auth + Database)
+- Node.js  
+- Express.js  
 
-Deployment
-- Vercel  
+Database
+- MongoDB (Mongoose)  
 
----
-
-## 📂 Project Structure
-
-/components     → Reusable UI components   /pages          → Application routes   /lib            → API & utility functions   /public         → Static assets  
-
----
-
-## ⚙️ Installation & Setup
-
-1. Clone the repository
-git clone https://github.com/tejasrmap/Thriftyyy.git
-
-2. Navigate to project directory
-cd Thriftyyy
-
-3. Install dependencies
-npm install
-
-4. Run the development server
-npm run dev
+Other Tools
+- JWT (Authentication)  
+- bcrypt (Password hashing)  
+- Cloudinary / AWS S3 (Image upload)  
+- Postman (API testing)  
 
 ---
 
-## 🔮 Future Improvements
+## ⚙️ Installation
 
-- 💳 Payment gateway integration  
-- 📦 Order tracking system  
-- ⭐ Reviews & ratings  
-- 🔔 Notifications system  
-- 📱 Mobile app (React Native / PWA)  
+bash git clone https://github.com/tejasrmap/Thriftyyy.git cd Thriftyyy 
 
----
+### Backend Setup
+bash cd server npm install npm start 
 
-## 🤝 Contributing
-
-Contributions are welcome!  
-Feel free to fork this repo and submit a pull request.
+### Frontend Setup
+bash cd client npm install npm run dev 
 
 ---
 
-## 📜 License
+## 🔐 Environment Variables
 
-This project is licensed under the MIT License.
+env MONGO_URI=your_mongodb_connection_string JWT_SECRET=your_secret_key PORT=5000 CLOUDINARY_URL=your_cloudinary_config 
+
+---
+
+## 🔮 Future Enhancements
+
+- 💳 Payment integration (Razorpay / Stripe)  
+- 📅 Real-time availability calendar  
+- ⭐ Ratings & reviews  
+- 🔔 Email/SMS notifications  
+- ❤️ Wishlist feature  
+- 🤖 AI-based recommendations  
+
+---
+
+## 📚 Learning Outcomes
+
+- Full Stack MERN Development  
+- REST API Design  
+- Authentication using JWT  
+- MongoDB Schema Design  
+- Booking system logic (date handling)  
+- Role-based access control  
 
 ---
 
 ## 👨‍💻 Author
 
 Teja Ganugula
-- GitHub: https://github.com/tejasrmap  
+🔗 https://github.com/tejasrmap  
 
 ---
 
 ## ⭐ Support
 
-If you like this project, consider giving it a ⭐ on Gi
-
+If you like this project, give it a ⭐ on
