@@ -8,16 +8,16 @@ const {
   updateCloth,
   deleteCloth,
 } = require("../controllers/clothController");
-const { protect, admin } = require("../middleware/authMiddleware");
+const { protect, admin, staff, checkPermission } = require("../middleware/authMiddleware");
 
-router.route("/").get(getClothes).post(protect, admin, createCloth);
+router.route("/").get(getClothes).post(protect, staff, checkPermission("canManageInventory"), createCloth);
 
 router
   .route("/:id")
   .get(getClothById)
-  .put(protect, updateCloth)
+  .put(protect, staff, checkPermission("canManageInventory"), updateCloth)
   .delete(protect, admin, deleteCloth);
 
-router.route("/:id/status").put(protect, admin, updateClothStatus);
+router.route("/:id/status").put(protect, staff, checkPermission("canManageInventory"), updateClothStatus);
 
 module.exports = router;

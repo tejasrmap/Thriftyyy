@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Button, buttonVariants } from "../components/ui/button";
-import { Badge } from "../components/ui/badge";
+import { cn } from "../lib/utils";
+import { Button } from "../components/ui/button";
 import { Calendar } from "../components/ui/calendar";
 import {
   Popover,
@@ -16,10 +16,14 @@ import {
   ShieldCheck,
   Truck,
   RefreshCw,
+  Star,
+  Info,
+  ArrowRight,
+  Heart,
+  Globe
 } from "lucide-react";
-import { cn } from "../lib/utils";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function ClothDetails() {
   const { id } = useParams();
@@ -52,8 +56,6 @@ export function ClothDetails() {
       return;
     }
     if (!date?.from || !date?.to || !cloth) return;
-
-    // Trigger Payment Gateway Mock Overlay
     setShowCheckout(true);
   };
 
@@ -62,18 +64,17 @@ export function ClothDetails() {
     setPaymentProcessing(true);
 
     try {
-      const days = Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 60 * 60 * 24)) + 1;
       const totalPrice = days * cloth.pricePerDay;
 
-      // 1. Create order on backend
       const { data: order } = await axios.post("/api/payments/razor", {
         amount: totalPrice,
-        currency: "USD", // Note: Razorpay default is INR, but we'll use USD as seen in UI, check Razorpay account support
+        currency: "INR",
         receipt: `receipt_${Date.now()}`,
       });
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_SfQRsRpAF0JY1T", // Provided by user
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_SfQRsRpAF0JY1T",
         amount: order.amount,
         currency: order.currency,
         name: "Thriftyy",
@@ -81,7 +82,6 @@ export function ClothDetails() {
         order_id: order.id,
         handler: async (response) => {
           try {
-            // 2. Verify payment on backend
             const { data: verifyData } = await axios.post("/api/payments/verify", {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -89,7 +89,6 @@ export function ClothDetails() {
             });
 
             if (verifyData.status === "success") {
-              // 3. Save booking
               setBookingLoading(true);
               await axios.post("/api/bookings", {
                 clothId: cloth._id,
@@ -111,7 +110,7 @@ export function ClothDetails() {
           }
         },
         prefill: {
-          name: user.fullName,
+          name: user.displayName,
           email: user.email,
         },
         theme: {
@@ -132,162 +131,125 @@ export function ClothDetails() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-  if (!cloth)
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Item Not Found
-        </h2>
-        <p className="text-gray-500 mb-6">
-          The item you are looking for does not exist or has been removed.
-        </p>
-        <Link to="/browse" className={buttonVariants({ variant: "default" })}>
-          Back to Collection
-        </Link>
-      </div>
-    );
+  if (loading) return <div className="min-h-screen bg-brand-ivory flex items-center justify-center"><motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-2 border-black/5 border-t-black rounded-full" /></div>;
+  if (!cloth) return <div className="min-h-screen bg-brand-ivory flex items-center justify-center text-black">Piece not found</div>;
 
-  const days =
-    date?.from && date?.to ? differenceInDays(date.to, date.from) + 1 : 0;
+  const days = date?.from && date?.to ? differenceInDays(date.to, date.from) + 1 : 0;
   const totalPrice = days * cloth.pricePerDay;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-      <Link
-        to="/browse"
-        className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-black mb-8 transition-colors"
-      >
-        <ChevronLeft className="w-4 h-4 mr-1" /> Back to Collection
-      </Link>
-
-      <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
-        {/* Left: Image */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative"
+    <div className="min-h-screen bg-brand-ivory text-black pt-32 pb-20 page-transition">
+      <div className="noise-overlay" />
+      
+      <div className="max-w-7xl mx-auto px-10">
+        <Link 
+          to="/browse" 
+          className="inline-flex items-center gap-3 text-black/40 hover:text-black transition-colors mb-16 text-[10px] font-bold uppercase tracking-[0.3em]"
         >
-          <div className="aspect-[3/4] md:aspect-auto md:h-[calc(100vh-12rem)] md:sticky top-24 rounded-3xl overflow-hidden bg-gray-100 border border-gray-200">
-            <img
-              src={cloth.imageUrl}
-              alt={cloth.title}
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
+          <ChevronLeft className="w-4 h-4" /> Back to Collection
+        </Link>
 
-            {!cloth.availability && (
-              <div className="absolute inset-0 bg-white/60 backdrop-blur-md flex items-center justify-center">
-                <Badge
-                  variant="secondary"
-                  className="px-4 py-2 text-base font-semibold bg-white text-black drop-shadow-md"
-                >
-                  Currently Rented
-                </Badge>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-start">
+          {/* Gallery View */}
+          <div className="lg:col-span-7 space-y-10">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="aspect-[4/5] rounded-[3rem] overflow-hidden border border-black/5 shadow-2xl relative group bg-white"
+            >
+              <img
+                src={cloth.imageUrl}
+                alt={cloth.title}
+                className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute top-10 right-10 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full flex items-center gap-2 border border-black/5 shadow-sm">
+                 <Star className="w-4 h-4 text-brand-gold fill-current" />
+                 <span className="text-sm font-black">4.9</span>
               </div>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Right: Details */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-col pt-4 md:pt-8"
-        >
-          <div className="mb-8">
-            <div className="flex gap-2 mb-4">
-              <Badge
-                variant="secondary"
-                className="px-3 py-1 bg-gray-100 text-gray-800 capitalize font-medium"
-              >
-                {cloth.category}
-              </Badge>
-              <Badge variant="outline" className="px-3 py-1 font-medium">
-                Size {cloth.size}
-              </Badge>
+            </motion.div>
+            
+            <div className="grid grid-cols-3 gap-8">
+               {[1, 2, 3].map((i) => (
+                 <div key={i} className="aspect-square rounded-[2rem] overflow-hidden border border-black/5 bg-white opacity-60 hover:opacity-100 transition-opacity cursor-pointer shadow-sm">
+                    <img src={cloth.imageUrl} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Detail" />
+                 </div>
+               ))}
             </div>
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight mb-4">
-              {cloth.title}
-            </h1>
-            <div className="flex items-end gap-2 mb-6">
-              <p className="text-3xl font-semibold text-gray-900">
-                ${cloth.pricePerDay}
+          </div>
+
+          {/* Product Dossier */}
+          <div className="lg:col-span-5 lg:sticky lg:top-40 space-y-12">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="flex items-center gap-4 mb-8">
+                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-gold border-b-2 border-brand-gold pb-1">
+                    {cloth.category}
+                 </span>
+                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30">
+                    Size {cloth.size}
+                 </span>
+                 {cloth.availability ? (
+                    <div className="flex items-center gap-2 ml-auto">
+                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                       <span className="text-[9px] font-black uppercase tracking-widest text-emerald-600">Available</span>
+                    </div>
+                 ) : (
+                    <span className="text-red-500 text-[9px] font-black uppercase tracking-widest ml-auto">In Rotation</span>
+                 )}
+              </div>
+              
+              <h1 className="text-6xl md:text-8xl font-display font-black uppercase tracking-tighter leading-[0.9] mb-10">
+                {cloth.title}
+              </h1>
+              
+              <p className="text-black/50 text-xl leading-relaxed mb-12 font-medium">
+                {cloth.description}
               </p>
-              <p className="text-gray-500 mb-1">/ day</p>
-            </div>
-            <p className="text-gray-600 text-lg leading-relaxed">
-              {cloth.description}
-            </p>
-          </div>
 
-          <div className="grid sm:grid-cols-2 gap-4 mb-10 py-6 border-y border-gray-100">
-            <div className="flex items-center gap-3 text-gray-600">
-              <ShieldCheck className="w-5 h-5 text-gray-400" />
-              <span className="text-sm font-medium">100% Authentic</span>
-            </div>
-            <div className="flex items-center gap-3 text-gray-600">
-              <Truck className="w-5 h-5 text-gray-400" />
-              <span className="text-sm font-medium">
-                Free Delivery & Return
-              </span>
-            </div>
-            <div className="flex items-center gap-3 text-gray-600">
-              <RefreshCw className="w-5 h-5 text-gray-400" />
-              <span className="text-sm font-medium">Dry Cleaning Included</span>
-            </div>
-          </div>
+              <div className="p-10 rounded-[3rem] bg-white border border-black/5 shadow-2xl space-y-10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-black/30 text-[9px] font-black uppercase tracking-[0.2em] mb-2">Daily Rental</p>
+                    <p className="text-5xl font-black tracking-tighter text-black">₹{cloth.pricePerDay} <span className="text-lg text-black/20 font-medium">INR</span></p>
+                  </div>
+                  <div className="text-right">
+                    <ShieldCheck className="w-10 h-10 text-brand-gold/20 ml-auto mb-2" />
+                    <p className="text-[9px] font-black text-black/40 uppercase tracking-widest">Verified Piece</p>
+                  </div>
+                </div>
 
-          <div className="bg-white rounded-3xl border border-gray-200 p-8 shadow-sm">
-            <h3 className="font-semibold text-xl mb-6">Reserve your dates</h3>
-
-            {!cloth.availability ? (
-              <div className="text-amber-700 font-medium bg-amber-50 rounded-2xl p-6 text-center border border-amber-100">
-                This item is currently out with another customer. Please check
-                back later.
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="space-y-3">
-                  <label className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-                    Rental Period
-                  </label>
+                <div className="space-y-4">
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-black/40">Rental Window</p>
                   <Popover>
-                    <PopoverTrigger
-                      className={cn(
-                        buttonVariants({ variant: "outline" }),
-                        "w-full justify-start text-left font-normal py-6 rounded-xl border-gray-300 text-base",
-                        !date && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="mr-3 h-5 w-5 text-gray-500" />
-                      {date?.from ? (
-                        date.to ? (
-                          <span className="text-gray-900 font-medium">
-                            {format(date.from, "MMM dd, y")} —{" "}
-                            {format(date.to, "MMM dd, y")}
-                          </span>
+                    <PopoverTrigger render={
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full h-18 bg-white border-earth-bark/10 rounded-[1.5rem] px-8 text-left font-bold text-earth-bark",
+                          !date && "text-earth-bark/30"
+                        )}
+                      >
+                        <CalendarIcon className="mr-4 h-5 w-5 text-earth-clay" />
+                        {date?.from ? (
+                          date.to ? (
+                            <>
+                              {format(date.from, "LLL dd, y")} -{" "}
+                              {format(date.to, "LLL dd, y")}
+                            </>
+                          ) : (
+                            format(date.from, "LLL dd, y")
+                          )
                         ) : (
-                          <span className="text-gray-900">
-                            {format(date.from, "MMM dd, y")}
-                          </span>
-                        )
-                      ) : (
-                        <span>Select start and end dates</span>
-                      )}
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0 rounded-2xl"
-                      align="start"
-                    >
+                          <span>Pick a lease duration</span>
+                        )}
+                      </Button>
+                    } />
+                    <PopoverContent className="w-auto p-0 border-black/5 bg-white shadow-2xl rounded-3xl overflow-hidden" align="start">
                       <Calendar
                         initialFocus
                         mode="range"
@@ -295,106 +257,108 @@ export function ClothDetails() {
                         selected={date}
                         onSelect={setDate}
                         numberOfMonths={2}
-                        disabled={(d) =>
-                          d < new Date(new Date().setHours(0, 0, 0, 0))
-                        }
-                        className="rounded-2xl"
+                        disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                        className="bg-white text-black p-6"
                       />
                     </PopoverContent>
                   </Popover>
                 </div>
 
-                {days > 0 ? (
-                  <div className="bg-gray-50 p-4 rounded-xl flex justify-between items-center border border-gray-100">
-                    <span className="text-gray-600">
-                      {days} days × ${cloth.pricePerDay}
+                {days > 0 && (
+                  <div className="bg-brand-ivory p-6 rounded-2xl flex justify-between items-center border border-black/5">
+                    <span className="text-black/40 text-[10px] font-black uppercase tracking-[0.2em]">
+                      {days} Days × ₹{cloth.pricePerDay}
                     </span>
-                    <span className="font-bold text-2xl text-gray-900">
-                      ${totalPrice}
+                    <span className="font-black text-2xl text-black">
+                      ₹{totalPrice}
                     </span>
-                  </div>
-                ) : (
-                  <div className="bg-gray-50 p-4 rounded-xl flex justify-between items-center border border-gray-100 opacity-50">
-                    <span className="text-gray-600">
-                      Select dates for pricing
-                    </span>
-                    <span className="font-bold text-2xl text-gray-900">$0</span>
                   </div>
                 )}
 
-                <div className="pt-6 border-t border-border/50">
-                  <Button
-                    onClick={handleBook}
-                    disabled={!date?.from || !date?.to || !cloth.availability}
-                    className="w-full h-14 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-primary/20"
-                  >
-                    {!cloth.availability ? "Unavailable for Dates" : "Proceed to Checkout"}
-                  </Button>
-                </div>
+                <Button
+                  className="w-full h-24 rounded-full bg-black text-white font-black text-xl uppercase tracking-[0.2em] hover:bg-brand-gold hover:scale-[1.02] active:scale-95 transition-all shadow-2xl disabled:opacity-30"
+                  onClick={handleBook}
+                  disabled={bookingLoading || !cloth.availability}
+                >
+                  {bookingLoading ? "Archiving..." : (cloth.availability ? "Reserve Piece" : "In Rotation")}
+                </Button>
               </div>
-            )}
+
+              <div className="mt-16 grid grid-cols-3 gap-10">
+                 {[
+                   { icon: Truck, text: "Boutique Delivery" },
+                   { icon: RefreshCw, text: "Curated Cleaning" },
+                   { icon: Globe, text: "Circular Luxury" }
+                 ].map((item, i) => (
+                   <div key={i} className="flex flex-col items-center text-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center shadow-sm">
+                         <item.icon className="w-5 h-5 text-brand-gold" />
+                      </div>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-black/30 leading-tight">{item.text}</p>
+                   </div>
+                 ))}
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
+      <AnimatePresence>
       {showCheckout && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-md p-6">
           <motion.div 
-            initial={{ scale: 0.95, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-card w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-border"
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-white w-full max-w-lg rounded-[3rem] shadow-[0_100px_200px_-50px_rgba(0,0,0,0.3)] overflow-hidden border border-black/5"
           >
-            <div className="bg-primary p-6 text-primary-foreground flex justify-between items-center">
+            <div className="bg-brand-ivory p-10 flex justify-between items-center border-b border-black/5">
               <div>
-                <h3 className="font-bold text-xl tracking-tight">Secure Checkout</h3>
-                <p className="text-sm opacity-80">Powered by Razorpay</p>
+                <h3 className="font-display font-black text-3xl tracking-tighter uppercase">Studio Checkout</h3>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-gold">Boutique Collective</p>
               </div>
-              <ShieldCheck className="w-8 h-8 opacity-50" />
+              <Heart className="w-12 h-12 text-brand-gold/10" />
             </div>
             
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6 py-4 border-b border-border/50">
+            <div className="p-10 space-y-10">
+              <div className="flex justify-between items-center py-8 border-b border-black/5">
                 <div>
-                  <p className="text-sm font-semibold">{cloth.title}</p>
-                  <p className="text-xs text-muted-foreground">{Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 60 * 60 * 24))} Days Rental</p>
+                  <p className="text-lg font-black text-black uppercase tracking-tighter">{cloth.title}</p>
+                  <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">{days} Day Lease</p>
                 </div>
-                <p className="font-bold text-xl">
-                  ${Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 60 * 60 * 24)) * cloth.pricePerDay}
+                <p className="font-black text-3xl text-black">
+                  ₹{totalPrice}
                 </p>
               </div>
 
-              <div className="space-y-4 mb-8">
-                <div className="h-12 bg-secondary/50 rounded-lg flex items-center px-4 border border-border">
-                  <span className="text-sm text-muted-foreground font-mono w-full">XXXX-XXXX-XXXX-[DEMO]</span>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
+              <div className="flex gap-6">
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   onClick={() => setShowCheckout(false)}
                   disabled={paymentProcessing}
-                  className="flex-1"
+                  className="flex-1 h-20 rounded-3xl border border-black/10 text-black hover:bg-black/5 font-black uppercase text-[10px] tracking-widest"
                 >
-                  Cancel
+                  Discard
                 </Button>
                 <Button 
                   onClick={processPaymentAndBook}
                   disabled={paymentProcessing}
-                  className="flex-1"
+                  className="flex-1 h-20 rounded-3xl bg-black text-white font-black uppercase tracking-widest text-[10px] hover:bg-brand-gold transition-all shadow-xl"
                 >
                   {paymentProcessing ? (
-                    <div className="flex items-center gap-2">
-                       <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-                       Processing...
+                    <div className="flex items-center gap-3">
+                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                       Validating
                     </div>
-                  ) : "Pay Now"}
+                  ) : "Confirm & Pay"}
                 </Button>
               </div>
             </div>
           </motion.div>
         </div>
       )}
+      </AnimatePresence>
     </div>
   );
 }
+

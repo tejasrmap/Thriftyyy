@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { cn } from "../lib/utils";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../components/ui/button";
@@ -23,7 +24,20 @@ import {
   X,
   Settings,
   ShieldCheck,
-  Calendar
+  Calendar,
+  Activity,
+  ArrowUpRight,
+  TrendingUp,
+  Cpu,
+  Database,
+  Search,
+  Sparkles,
+  Zap,
+  BarChart3,
+  Layers,
+  Leaf,
+  Sun,
+  Wind
 } from "lucide-react";
 import {
   Sheet,
@@ -32,19 +46,18 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from "../components/ui/sheet";
 import { Switch } from "../components/ui/switch";
 
 export function Admin() {
-  const { role, permissions: userPermissions } = useAuth();
+  const { role, user, permissions: userPermissions } = useAuth();
   const permissions = role === "admin" ? { canManageInventory: true, canSeeRevenue: true, canManageBookings: true } : userPermissions;
   const [clothes, setClothes] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form states for adding/editing
+  // Form states
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("casual");
@@ -52,8 +65,6 @@ export function Admin() {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  
-  // Selection/Edit state
   const [editingItem, setEditingItem] = useState(null);
 
   // Employee form state
@@ -141,46 +152,12 @@ export function Admin() {
   };
 
   const handleDeleteCloth = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this piece?")) return;
+    if (!window.confirm("Permanent deletion?")) return;
     try {
       await axios.delete(`/api/clothes/${id}`);
       fetchData();
     } catch (error) {
       alert("Delete failed");
-    }
-  };
-
-  const handleAddEmployee = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("/api/admin/employees", {
-        fullName: empName, email: empEmail, password: empPass, permissions: empPerms
-      });
-      fetchData();
-      setEmpName(""); setEmpEmail(""); setEmpPass("");
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to add employee");
-    }
-  };
-
-  const toggleEmpPermission = async (id, key, current) => {
-    try {
-      await axios.put(`/api/admin/employees/${id}/permissions`, {
-        permissions: { [key]: !current }
-      });
-      fetchData();
-    } catch (error) {
-       console.error(error);
-    }
-  };
-
-  const handleDeleteEmployee = async (id) => {
-    if (!window.confirm("Remove this staff member?")) return;
-    try {
-      await axios.delete(`/api/admin/employees/${id}`);
-      fetchData();
-    } catch (error) {
-       alert("Failed to remove staff");
     }
   };
 
@@ -197,408 +174,328 @@ export function Admin() {
     setPrice(item.pricePerDay);
   };
 
-  if (role !== "admin" && role !== "employee") {
-    return (
-      <div className="min-h-screen pt-32 px-10 flex flex-col items-center">
-         <ShieldCheck className="w-20 h-20 text-red-600 mb-6" />
-         <h2 className="text-4xl font-display font-extrabold uppercase tracking-tighter">Access Forbidden</h2>
-         <p className="text-zinc-500 mt-4 tracking-widest uppercase text-sm">Security clearance required.</p>
-      </div>
-    );
-  }
+  const toggleEmpPermission = async (id, key, current) => {
+    try {
+      await axios.put(`/api/admin/employees/${id}/permissions`, {
+        permissions: { [key]: !current }
+      });
+      fetchData();
+    } catch (error) {
+       console.error(error);
+    }
+  };
+
+  const handleDeleteEmployee = async (id) => {
+    if (!window.confirm("Remove staff access?")) return;
+    try {
+      await axios.delete(`/api/admin/employees/${id}`);
+      fetchData();
+    } catch (error) {
+       alert("Failed to remove staff");
+    }
+  };
+
+  const handleAddEmployee = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("/api/admin/employees", {
+        fullName: empName, email: empEmail, password: empPass, permissions: empPerms
+      });
+      fetchData();
+      setEmpName(""); setEmpEmail(""); setEmpPass("");
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to add employee");
+    }
+  };
+
+  if (loading) return <div className="min-h-screen bg-background flex items-center justify-center grain-texture"><div className="w-12 h-12 border-4 border-earth-clay border-t-transparent rounded-full animate-spin" /></div>;
 
   const totalRevenue = bookings.reduce((sum, b) => sum + b.totalPrice, 0);
   const activeBookings = bookings.filter((b) => b.status === "booked").length;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 pb-32">
-      {/* Dynamic Studio Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-        <div className="flex items-center gap-6">
-          <div className="w-16 h-16 bg-black text-white rounded-[2rem] flex items-center justify-center shadow-2xl">
-            <LayoutDashboard className="w-8 h-8" />
-          </div>
-          <div>
-            <h1 className="text-6xl font-display font-extrabold tracking-architectural text-black uppercase leading-[0.85]">
-              Archive<br />
-              <span className="text-zinc-400">Control.</span>
-            </h1>
-            <p className="text-zinc-400 mt-4 font-bold text-xs tracking-[0.3em] uppercase">
-               Studio Terminal & Management
-            </p>
-          </div>
+    <div className="space-y-16 pb-20 grain-texture">
+      {/* Header Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="lg:col-span-8 organic-card p-12 md:p-16 bg-white shadow-[12px_12px_0px_rgba(69,26,3,0.05)]">
+           <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-earth-sage text-earth-linen rounded-xl flex items-center justify-center shadow-lg">
+                 <Sun className="w-6 h-6" />
+              </div>
+              <span className="text-[11px] font-black uppercase tracking-[0.4em] text-earth-sage">Studio Archive Node v4</span>
+           </div>
+           <h1 className="font-display font-black text-6xl md:text-9xl tracking-tighter text-earth-bark leading-none">
+             Collective <br /> <span className="text-earth-clay italic">Management.</span>
+           </h1>
         </div>
 
-        {/* Global Action Bar */}
-        <div className="flex items-center gap-4">
+        <div className="lg:col-span-4 organic-card p-12 flex flex-col justify-between bg-earth-clay text-earth-linen shadow-[12px_12px_0px_rgba(153,27,27,0.1)] border-transparent">
+           <div className="flex justify-between items-start">
+              <TrendingUp className="w-10 h-10 text-earth-linen/30" />
+              <div className="bg-white/10 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10">Active Flux</div>
+           </div>
+           <div>
+              <p className="text-earth-linen/40 text-[10px] font-black uppercase tracking-widest mb-3">Gross Archive Revenue</p>
+              <h2 className="text-6xl font-display font-black tracking-tighter">₹{totalRevenue.toLocaleString()}</h2>
+           </div>
+        </div>
+      </div>
+
+      {/* Stats Cluster */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+        {[
+          { label: "Active Leases", value: activeBookings, icon: Wind, color: "bg-earth-sage" },
+          { label: "Archived Pieces", value: clothes.length, icon: Layers, color: "bg-earth-clay" },
+          { label: "Member Growth", value: "+18%", icon: Users, color: "bg-earth-saffron" },
+          { label: "System Health", value: "Verified", icon: ShieldCheck, color: "bg-earth-bark" },
+        ].map((stat, i) => (
+          <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+             <div className="organic-card p-10 group hover:organic-card-hover bg-white">
+                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center text-earth-linen shadow-xl mb-8", stat.color)}>
+                   <stat.icon className="w-6 h-6" />
+                </div>
+                <p className="text-earth-bark/40 text-[10px] font-black uppercase tracking-widest mb-2">{stat.label}</p>
+                <p className="text-4xl font-display font-black text-earth-bark tracking-tight">{stat.value}</p>
+             </div>
+          </motion.div>
+        ))}
+      </div>
+
+      <Tabs defaultValue="inventory" className="w-full">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-10 mb-16">
+           <TabsList className="p-2 bg-earth-linen border border-earth-bark/10 rounded-[2.5rem] h-24 shadow-inner">
+             <TabsTrigger value="inventory" className="rounded-full px-12 h-full font-black text-[12px] uppercase tracking-widest data-[state=active]:bg-earth-clay data-[state=active]:text-earth-linen transition-all">Archive</TabsTrigger>
+             <TabsTrigger value="bookings" className="rounded-full px-12 h-full font-black text-[12px] uppercase tracking-widest data-[state=active]:bg-earth-clay data-[state=active]:text-earth-linen transition-all">Manifest</TabsTrigger>
+             {role === "admin" && (
+               <TabsTrigger value="employees" className="rounded-full px-12 h-full font-black text-[12px] uppercase tracking-widest data-[state=active]:bg-earth-clay data-[state=active]:text-earth-linen transition-all">Personnel</TabsTrigger>
+             )}
+           </TabsList>
+
            {permissions.canManageInventory && (
-             <Sheet>
-               <SheetTrigger
-                 render={
-                   <Button className="rounded-full px-8 py-6 bg-black text-white hover:bg-zinc-800 shadow-xl transition-all font-bold uppercase tracking-widest text-xs">
-                     <PlusCircle className="w-4 h-4 mr-2" /> Add New Piece
-                   </Button>
-                 }
-               />
-               <SheetContent side="right" className="w-[400px] sm:w-[540px] bg-white p-10">
-                 <SheetHeader className="mb-10 text-left">
-                   <SheetTitle className="text-4xl font-display font-extrabold tracking-tighter uppercase">New Catalog Entry</SheetTitle>
-                   <SheetDescription className="tracking-widest uppercase text-xs font-bold text-zinc-400">Expand the Thriftyy Collection</SheetDescription>
-                 </SheetHeader>
-                 <form onSubmit={handleCreateCloth} className="space-y-8">
-                    <div className="space-y-6">
-                       <div className="space-y-2">
-                          <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Title</Label>
-                          <Input value={title} onChange={e => setTitle(e.target.value)} required placeholder="e.g. Dior Shadow Vest" className="rounded-xl h-14" />
-                       </div>
-                       <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                             <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Category</Label>
-                             <Select value={category} onValueChange={setCategory}>
-                                <SelectTrigger className="rounded-xl h-14"><SelectValue /></SelectTrigger>
-                                <SelectContent><SelectItem value="casual">Casual</SelectItem><SelectItem value="formal">Formal</SelectItem><SelectItem value="party">Party</SelectItem><SelectItem value="wedding">Wedding</SelectItem></SelectContent>
-                             </Select>
-                          </div>
-                          <div className="space-y-2">
-                             <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Size</Label>
-                             <Select value={size} onValueChange={setSize}>
-                                <SelectTrigger className="rounded-xl h-14"><SelectValue /></SelectTrigger>
-                                <SelectContent><SelectItem value="S">S</SelectItem><SelectItem value="M">M</SelectItem><SelectItem value="L">L</SelectItem><SelectItem value="XL">XL</SelectItem></SelectContent>
-                             </Select>
-                          </div>
-                       </div>
-                       <div className="space-y-2">
-                          <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Daily Price ($)</Label>
-                          <Input type="number" value={price} onChange={e => setPrice(e.target.value)} required placeholder="150" className="rounded-xl h-14" />
-                       </div>
-                       <div className="space-y-2">
-                          <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Imagery</Label>
-                          <Input type="file" onChange={e => setImage(e.target.files[0])} required className="rounded-xl h-14 pt-3" />
-                       </div>
-                       <div className="space-y-2">
-                          <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Description</Label>
-                          <Input value={description} onChange={e => setDescription(e.target.value)} required placeholder="Premium velvet finish..." className="rounded-xl h-14" />
-                       </div>
-                    </div>
-                    <Button type="submit" disabled={submitting} className="w-full py-8 rounded-2xl bg-black text-white font-black uppercase tracking-widest">
-                       {submitting ? "Processing..." : "Confirm & Publish"}
-                    </Button>
-                 </form>
-               </SheetContent>
-             </Sheet>
+              <Sheet>
+              <SheetTrigger render={
+                <Button className="clay-button h-24 px-12 text-xs uppercase tracking-widest shadow-2xl">
+                  <PlusCircle className="w-6 h-6 mr-4" /> Archive New Piece
+                </Button>
+              } />
+                <SheetContent className="w-full sm:w-[650px] bg-earth-linen border-l-earth-bark/10 p-16 overflow-y-auto grain-texture">
+                   <SheetHeader className="mb-16">
+                      <SheetTitle className="text-6xl font-display font-black tracking-tighter text-earth-bark leading-none">New <span className="text-earth-clay italic">Archival.</span></SheetTitle>
+                      <SheetDescription className="text-earth-bark/40 font-black uppercase tracking-[0.4em] text-[10px] mt-4">Structural Asset Registry</SheetDescription>
+                   </SheetHeader>
+                   <form onSubmit={handleCreateCloth} className="space-y-12">
+                      <div className="space-y-4">
+                         <Label className="text-[11px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Nomenclature / Identity</Label>
+                         <Input value={title} onChange={e => setTitle(e.target.value)} required placeholder="e.g. Saffron Archive Gown" className="h-18 bg-white border-earth-bark/10 rounded-[1.5rem] px-8 font-bold text-lg text-earth-bark" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-10">
+                        <div className="space-y-4">
+                           <Label className="text-[11px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Classification</Label>
+                           <Select value={category} onValueChange={setCategory}>
+                              <SelectTrigger className="h-18 bg-white border-earth-bark/10 rounded-[1.5rem] px-8 font-black uppercase tracking-[0.2em] text-[11px]"><SelectValue /></SelectTrigger>
+                              <SelectContent className="rounded-2xl border-earth-bark/10"><SelectItem value="casual">Casual</SelectItem><SelectItem value="formal">Formal</SelectItem><SelectItem value="party">Party</SelectItem><SelectItem value="wedding">Wedding</SelectItem></SelectContent>
+                           </Select>
+                        </div>
+                        <div className="space-y-4">
+                           <Label className="text-[11px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Structural Size</Label>
+                           <Select value={size} onValueChange={setSize}>
+                              <SelectTrigger className="h-18 bg-white border-earth-bark/10 rounded-[1.5rem] px-8 font-black uppercase tracking-[0.2em] text-[11px]"><SelectValue /></SelectTrigger>
+                              <SelectContent className="rounded-2xl border-earth-bark/10"><SelectItem value="S">S</SelectItem><SelectItem value="M">M</SelectItem><SelectItem value="L">L</SelectItem><SelectItem value="XL">XL</SelectItem></SelectContent>
+                           </Select>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                         <Label className="text-[11px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Daily Lease Rate (₹)</Label>
+                         <Input type="number" value={price} onChange={e => setPrice(e.target.value)} required className="h-18 bg-white border-earth-bark/10 rounded-[1.5rem] px-8 font-black text-2xl text-earth-bark" />
+                      </div>
+                      <div className="space-y-4">
+                         <Label className="text-[11px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Visual Proof</Label>
+                         <div className="h-40 border-2 border-dashed border-earth-bark/20 rounded-[2.5rem] bg-white/50 flex items-center justify-center relative group overflow-hidden transition-all hover:bg-white hover:border-earth-clay/30">
+                            <Input type="file" onChange={e => setImage(e.target.files[0])} required className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                            <div className="text-center group-hover:scale-110 transition-transform">
+                               <Sparkles className="w-10 h-10 text-earth-clay mx-auto mb-3 opacity-40" />
+                               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-earth-bark/30">{image ? image.name : "Initialize Upload"}</p>
+                            </div>
+                         </div>
+                      </div>
+                      <Button type="submit" disabled={submitting} className="clay-button w-full h-24 text-xs uppercase tracking-[0.3em] shadow-2xl">
+                         {submitting ? "Processing Asset..." : "Confirm Archival Entry"}
+                      </Button>
+                   </form>
+                </SheetContent>
+              </Sheet>
            )}
         </div>
-      </div>
 
-      {/* Cinematic Stat Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-        {permissions.canSeeRevenue !== false && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Card className="rounded-[2.5rem] border-zinc-100 shadow-2xl shadow-zinc-200/50 p-8 hover:scale-[1.02] transition-transform">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 bg-zinc-100 rounded-2xl flex items-center justify-center text-black">
-                   <DollarSign className="w-6 h-6" />
-                </div>
-                <Badge className="bg-green-100 text-green-700 border-0 uppercase text-[10px] font-black px-3 py-1">+14%</Badge>
-              </div>
-              <h4 className="text-zinc-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-1">Total Management Revenue</h4>
-              <div className="text-5xl font-display font-extrabold tracking-tighter">${totalRevenue.toLocaleString()}<span className="text-zinc-300 text-2xl">.00</span></div>
-            </Card>
-          </motion.div>
-        )}
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <Card className="rounded-[2.5rem] border-zinc-100 shadow-2xl shadow-zinc-200/50 p-8 hover:scale-[1.02] transition-transform">
-            <div className="flex justify-between items-start mb-6">
-              <div className="w-12 h-12 bg-zinc-100 rounded-2xl flex items-center justify-center text-black">
-                 <ShoppingBag className="w-6 h-6" />
-              </div>
-            </div>
-            <h4 className="text-zinc-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-1">Active Studio Bookings</h4>
-            <div className="text-5xl font-display font-extrabold tracking-tighter">{activeBookings}<span className="text-zinc-300 text-2xl"> UNITS</span></div>
-          </Card>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <Card className="rounded-[2.5rem] border-zinc-100 shadow-2xl shadow-zinc-200/50 p-8 hover:scale-[1.02] transition-transform">
-            <div className="flex justify-between items-start mb-6">
-              <div className="w-12 h-12 bg-zinc-100 rounded-2xl flex items-center justify-center text-black">
-                 <Package className="w-6 h-6" />
-              </div>
-            </div>
-            <h4 className="text-zinc-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-1">Live Catalog Depth</h4>
-            <div className="text-5xl font-display font-extrabold tracking-tighter">{clothes.length}<span className="text-zinc-300 text-2xl"> PIECES</span></div>
-          </Card>
-        </motion.div>
-      </div>
-
-      {/* Main Studio Console */}
-      <Tabs defaultValue="inventory" className="w-full">
-        <TabsList className="mb-12 p-2 bg-zinc-100 rounded-[2rem] h-20 w-full md:w-auto">
-          <TabsTrigger value="inventory" className="rounded-[1.5rem] px-10 h-full font-bold uppercase tracking-widest text-[11px] data-[state=active]:bg-black data-[state=active]:text-white">
-            Inventory System
-          </TabsTrigger>
-          <TabsTrigger value="bookings" className="rounded-[1.5rem] px-10 h-full font-bold uppercase tracking-widest text-[11px] data-[state=active]:bg-black data-[state=active]:text-white">
-            Order Flow
-          </TabsTrigger>
-          {role === "admin" && (
-            <TabsTrigger value="employees" className="rounded-[1.5rem] px-10 h-full font-bold uppercase tracking-widest text-[11px] data-[state=active]:bg-black data-[state=active]:text-white">
-              Studio Staff
-            </TabsTrigger>
-          )}
-        </TabsList>
-
-        {/* --- INVENTORY TAB --- */}
-        <TabsContent value="inventory" className="space-y-10 focus:outline-none">
-          <Card className="rounded-[3rem] border-zinc-100 shadow-3xl overflow-hidden bg-white">
-             <div className="p-10 border-b border-zinc-50 flex items-center justify-between">
-                <div>
-                   <h3 className="text-2xl font-display font-extrabold tracking-tighter uppercase">Product Catalog</h3>
-                   <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-1">Surgical control of digital inventory</p>
-                </div>
-             </div>
-             <Table>
-                <TableHeader>
-                   <TableRow className="border-zinc-50 hover:bg-transparent">
-                      <TableHead className="px-10 py-6 text-zinc-400 font-black uppercase text-[10px] tracking-widest">Piece Overview</TableHead>
-                      <TableHead className="text-zinc-400 font-black uppercase text-[10px] tracking-widest">Category</TableHead>
-                      <TableHead className="text-zinc-400 font-black uppercase text-[10px] tracking-widest">Price/Day</TableHead>
-                      <TableHead className="text-zinc-400 font-black uppercase text-[10px] tracking-widest">Visibility</TableHead>
-                      <TableHead className="text-right px-10 text-zinc-400 font-black uppercase text-[10px] tracking-widest">Actions</TableHead>
-                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                   {clothes.map(cloth => (
-                     <TableRow key={cloth._id} className="border-zinc-50 hover:bg-zinc-50/50 transition-colors">
-                        <TableCell className="px-10 py-8">
-                           <div className="flex items-center gap-4">
-                              <div className="w-12 h-16 bg-zinc-100 rounded-lg overflow-hidden flex-shrink-0">
-                                 <img src={cloth.imageUrl} alt="" className="w-full h-full object-cover" />
-                              </div>
-                              <div>
-                                 <div className="font-display font-extrabold uppercase text-lg leading-tight">{cloth.title}</div>
-                                 <div className="text-[10px] font-black uppercase text-zinc-400 mt-1 tracking-widest border border-zinc-200 px-2 py-0.5 rounded inline-block">Size {cloth.size}</div>
-                              </div>
-                           </div>
-                        </TableCell>
-                        <TableCell className="uppercase text-[11px] font-black tracking-widest">{cloth.category}</TableCell>
-                        <TableCell className="font-display font-extrabold text-lg">${cloth.pricePerDay}</TableCell>
-                        <TableCell>
-                           <Badge className={`rounded-lg px-3 py-1.5 uppercase text-[9px] font-black border-0 shadow-none ${cloth.availability ? "bg-green-100 text-green-700" : "bg-zinc-100 text-zinc-400"}`}>
-                              {cloth.availability ? "On Gallery" : "Hidden"}
-                           </Badge>
-                        </TableCell>
-                        <TableCell className="text-right px-10">
-                           <div className="flex items-center justify-end gap-2">
-                              {permissions.canManageInventory && (
-                                <Sheet>
-                                  <SheetTrigger
-                                    render={
-                                      <Button size="icon" variant="ghost" className="w-10 h-10 rounded-full hover:bg-black hover:text-white transition-all" onClick={() => openEdit(cloth)}>
-                                        <Edit2 className="w-4 h-4" />
-                                      </Button>
-                                    }
-                                  />
-                                  <SheetContent side="right" className="w-[400px] sm:w-[500px] bg-white p-10">
-                                      <SheetHeader className="mb-10 text-left">
-                                         <SheetTitle className="text-4xl font-display font-extrabold tracking-tighter uppercase">Edit Evolution</SheetTitle>
-                                         <SheetDescription className="tracking-widest uppercase text-xs font-bold text-zinc-400">Modify properties of {editingItem?.title}</SheetDescription>
-                                      </SheetHeader>
-                                      <form onSubmit={handleUpdateCloth} className="space-y-8">
-                                         <div className="space-y-6">
-                                            <div className="space-y-2">
-                                               <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Title</Label>
-                                               <Input value={title} onChange={e => setTitle(e.target.value)} required className="rounded-xl h-14" />
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-4">
-                                               <div className="space-y-2">
-                                                  <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Category</Label>
-                                                  <Select value={category} onValueChange={setCategory}>
-                                                     <SelectTrigger className="rounded-xl h-14"><SelectValue /></SelectTrigger>
-                                                     <SelectContent><SelectItem value="casual">Casual</SelectItem><SelectItem value="formal">Formal</SelectItem><SelectItem value="party">Party</SelectItem><SelectItem value="wedding">Wedding</SelectItem></SelectContent>
-                                                  </Select>
-                                               </div>
-                                               <div className="space-y-2">
-                                                  <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Size</Label>
-                                                  <Select value={size} onValueChange={setSize}>
-                                                     <SelectTrigger className="rounded-xl h-14"><SelectValue /></SelectTrigger>
-                                                     <SelectContent><SelectItem value="S">S</SelectItem><SelectItem value="M">M</SelectItem><SelectItem value="L">L</SelectItem><SelectItem value="XL">XL</SelectItem></SelectContent>
-                                                  </Select>
-                                               </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                               <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Daily Rate ($)</Label>
-                                               <Input type="number" value={price} onChange={e => setPrice(e.target.value)} required className="rounded-xl h-14" />
-                                            </div>
-                                            <div className="space-y-2">
-                                               <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">New Imagery (Optional)</Label>
-                                               <Input type="file" onChange={e => setImage(e.target.files[0])} className="rounded-xl h-14 pt-3" />
-                                            </div>
-                                            <div className="space-y-2">
-                                               <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Description</Label>
-                                               <Input value={description} onChange={e => setDescription(e.target.value)} required className="rounded-xl h-14" />
-                                            </div>
-                                         </div>
-                                         <Button type="submit" disabled={submitting} className="w-full py-8 rounded-2xl bg-black text-white font-black uppercase tracking-widest shadow-2xl">
-                                            {submitting ? "Updating System..." : "Save Evolution"}
-                                         </Button>
-                                      </form>
-                                  </SheetContent>
-                                </Sheet>
-                              )}
-                              {role === "admin" && (
-                                <Button size="icon" variant="ghost" className="w-10 h-10 rounded-full hover:bg-red-50 text-zinc-300 hover:text-red-600 transition-all" onClick={() => handleDeleteCloth(cloth._id)}>
-                                   <Trash2 className="w-4 h-4" />
+        <TabsContent value="inventory" className="space-y-12">
+           <div className="organic-card bg-white shadow-xl overflow-hidden">
+              <Table>
+                 <TableHeader className="bg-earth-linen/50">
+                    <TableRow className="border-earth-bark/5 hover:bg-transparent">
+                       <TableHead className="px-12 py-8 font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Archive Reference</TableHead>
+                       <TableHead className="font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Taxonomy</TableHead>
+                       <TableHead className="font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Lease Rate</TableHead>
+                       <TableHead className="font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Flux State</TableHead>
+                       <TableHead className="text-right px-12 font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Modify</TableHead>
+                    </TableRow>
+                 </TableHeader>
+                 <TableBody>
+                    {clothes.map(cloth => (
+                       <TableRow key={cloth._id} className="border-earth-bark/5 hover:bg-earth-linen/30 transition-all group">
+                          <TableCell className="px-12 py-10">
+                             <div className="flex items-center gap-8">
+                                <div className="w-20 h-28 rounded-2xl overflow-hidden bg-earth-linen border border-earth-bark/5 shadow-inner">
+                                   <img src={cloth.imageUrl} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                                </div>
+                                <div className="space-y-1">
+                                   <div className="font-black text-lg text-earth-bark uppercase tracking-tight">{cloth.title}</div>
+                                   <div className="text-[10px] font-bold text-earth-bark/30 uppercase tracking-[0.3em]">Size {cloth.size} • REF-{cloth._id.slice(-6).toUpperCase()}</div>
+                                </div>
+                             </div>
+                          </TableCell>
+                          <TableCell><Badge variant="outline" className="rounded-full border-earth-sage/20 text-earth-sage bg-earth-sage/5 uppercase tracking-[0.2em] text-[10px] px-4 py-1">{cloth.category}</Badge></TableCell>
+                          <TableCell><div className="font-black text-2xl text-earth-bark">₹{cloth.pricePerDay}<span className="text-[10px] text-earth-bark/20 ml-2 font-black uppercase tracking-widest">Day</span></div></TableCell>
+                          <TableCell>
+                             <div className={cn(
+                               "inline-flex items-center gap-3 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em]",
+                               cloth.availability ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
+                             )}>
+                                <div className={cn("w-2 h-2 rounded-full", cloth.availability ? "bg-emerald-600 animate-pulse" : "bg-red-600")} />
+                                {cloth.availability ? "Available" : "Reserved"}
+                             </div>
+                          </TableCell>
+                          <TableCell className="text-right px-12">
+                             <div className="flex items-center justify-end gap-4 opacity-0 group-hover:opacity-100 transition-all">
+                                <Button size="icon" variant="ghost" className="w-12 h-12 rounded-xl bg-earth-linen text-earth-bark/40 hover:text-earth-clay hover:bg-white hover:shadow-lg" onClick={() => openEdit(cloth)}>
+                                   <Edit2 className="w-5 h-5" />
                                 </Button>
-                              )}
-                           </div>
-                        </TableCell>
-                     </TableRow>
-                   ))}
-                </TableBody>
-             </Table>
-          </Card>
+                                <Button size="icon" variant="ghost" className="w-12 h-12 rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white hover:shadow-lg" onClick={() => handleDeleteCloth(cloth._id)}>
+                                   <Trash2 className="w-5 h-5" />
+                                </Button>
+                             </div>
+                          </TableCell>
+                       </TableRow>
+                    ))}
+                 </TableBody>
+              </Table>
+           </div>
         </TabsContent>
 
-        {/* --- BOOKINGS TAB --- */}
-        <TabsContent value="bookings" className="focus:outline-none">
-           <Card className="rounded-[3rem] border-zinc-100 shadow-3xl overflow-hidden bg-white">
+        <TabsContent value="bookings" className="space-y-12">
+           <div className="organic-card bg-white shadow-xl overflow-hidden">
               <Table>
-                 <TableHeader>
-                    <TableRow className="border-zinc-50 hover:bg-transparent">
-                       <TableHead className="px-10 py-6 text-zinc-400 font-black uppercase text-[10px] tracking-widest">Order Reference</TableHead>
-                       <TableHead className="text-zinc-400 font-black uppercase text-[10px] tracking-widest">Studio Client</TableHead>
-                       <TableHead className="text-zinc-400 font-black uppercase text-[10px] tracking-widest">Revenue Impact</TableHead>
-                       <TableHead className="text-zinc-400 font-black uppercase text-[10px] tracking-widest">Pulse</TableHead>
-                       <TableHead className="text-right px-10 text-zinc-400 font-black uppercase text-[10px] tracking-widest">Control</TableHead>
+                 <TableHeader className="bg-earth-linen/50">
+                    <TableRow className="border-earth-bark/5 hover:bg-transparent">
+                       <TableHead className="px-12 py-8 font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Lease Payload</TableHead>
+                       <TableHead className="font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Client Protocol</TableHead>
+                       <TableHead className="font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Gross Value</TableHead>
+                       <TableHead className="font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Flux State</TableHead>
+                       <TableHead className="text-right px-12 font-black uppercase text-[11px] tracking-[0.3em] text-earth-bark/40">Action</TableHead>
                     </TableRow>
                  </TableHeader>
                  <TableBody>
                     {bookings.map(book => (
-                       <TableRow key={book._id} className="border-zinc-50 hover:bg-zinc-50/50 transition-colors">
-                          <TableCell className="px-10 py-8">
-                             <div className="font-display font-extrabold uppercase tracking-tighter text-lg">ORD-{book._id.substring(18).toUpperCase()}</div>
-                             <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-1 mt-1">
-                                <Calendar className="w-3 h-3" /> {new Date(book.startDate).toLocaleDateString()} — {new Date(book.endDate).toLocaleDateString()}
+                       <TableRow key={book._id} className="border-earth-bark/5 hover:bg-earth-linen/30 transition-all group">
+                          <TableCell className="px-12 py-10">
+                             <div className="font-black text-earth-bark text-lg tracking-tighter uppercase">#LEASE-{book._id.slice(-6).toUpperCase()}</div>
+                             <div className="text-[10px] font-bold text-earth-bark/30 uppercase tracking-[0.3em] mt-3 flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-earth-clay" /> {new Date(book.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                              </div>
                           </TableCell>
                           <TableCell>
-                             <div className="font-bold text-sm">{book.user?.fullName || "Private Studio User"}</div>
-                             <div className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold">{book.user?.email}</div>
+                             <div className="font-black text-earth-bark text-sm uppercase tracking-tight">{book.user?.fullName || "External Guest"}</div>
+                             <div className="text-[10px] font-medium text-earth-bark/40 mt-1">{book.user?.email}</div>
                           </TableCell>
-                          <TableCell className="font-display font-extrabold text-lg">${book.totalPrice}</TableCell>
+                          <TableCell><div className="font-black text-2xl text-earth-sage">₹{book.totalPrice}</div></TableCell>
                           <TableCell>
-                             <Badge className={`rounded-lg px-3 py-1.5 uppercase text-[9px] font-black border-0 shadow-none ${book.status === "booked" ? "bg-blue-50 text-blue-600" : "bg-zinc-100 text-zinc-400"}`}>
+                             <Badge variant={book.status === "booked" ? "default" : "secondary"} className={cn("rounded-full uppercase tracking-[0.3em] text-[9px] px-5 py-1.5", book.status === "booked" ? "bg-earth-clay text-earth-linen shadow-lg" : "bg-earth-linen text-earth-bark/30")}>
                                 {book.status}
                              </Badge>
                           </TableCell>
-                          <TableCell className="text-right px-10">
+                          <TableCell className="text-right px-12">
                              {permissions.canManageBookings && book.status === "booked" && (
-                               <Button variant="outline" size="sm" className="rounded-full px-6 font-bold uppercase tracking-widest text-[9px] border-zinc-200" onClick={() => axios.put(`/api/bookings/${book._id}/return`).then(fetchData)}>
-                                  Archive Return
-                               </Button>
+                                <Button className="h-12 px-8 rounded-full bg-white border border-earth-bark/10 text-earth-bark text-[10px] font-black uppercase tracking-widest hover:bg-earth-bark hover:text-white transition-all shadow-md" onClick={() => axios.put(`/api/bookings/${book._id}/return`).then(fetchData)}>
+                                   Process Return
+                                </Button>
                              )}
                           </TableCell>
                        </TableRow>
                     ))}
                  </TableBody>
               </Table>
-           </Card>
+           </div>
         </TabsContent>
 
-        {/* --- EMPLOYEES TAB (ADMIN ONLY) --- */}
         {role === "admin" && (
-           <TabsContent value="employees" className="space-y-10 focus:outline-none">
+           <TabsContent value="employees" className="space-y-12">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                 {/* Staff Roster */}
-                 <div className="lg:col-span-2">
-                    <Card className="rounded-[3rem] border-zinc-100 shadow-3xl overflow-hidden bg-white">
-                       <div className="p-10 border-b border-zinc-50">
-                          <h3 className="text-2xl font-display font-extrabold tracking-tighter uppercase">Staff Roster</h3>
-                          <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-1">Management of Studio Clearance Levels</p>
-                       </div>
-                       <Table>
-                          <TableHeader>
-                             <TableRow className="border-zinc-50 hover:bg-transparent">
-                                <TableHead className="px-10 py-6 text-zinc-400 font-black uppercase text-[10px] tracking-widest">Staff Identity</TableHead>
-                                <TableHead className="text-zinc-400 font-black uppercase text-[10px] tracking-widest">Clearance Switches</TableHead>
-                                <TableHead className="text-right px-10 text-zinc-400 font-black uppercase text-[10px] tracking-widest">Action</TableHead>
+                 <div className="lg:col-span-2 organic-card bg-white shadow-xl overflow-hidden">
+                    <div className="p-12 border-b border-earth-bark/5 bg-earth-linen/20">
+                       <h3 className="text-3xl font-display font-black text-earth-bark tracking-tight">Personnel Nodes.</h3>
+                       <p className="text-[10px] font-black uppercase tracking-[0.4em] text-earth-bark/30 mt-2">Active access control manifest</p>
+                    </div>
+                    <Table>
+                       <TableBody>
+                          {employees.map(emp => (
+                             <TableRow key={emp._id} className="border-earth-bark/5 hover:bg-earth-linen/30 transition-all group">
+                                <TableCell className="px-12 py-10">
+                                   <div className="flex items-center gap-8">
+                                      <div className="w-16 h-16 bg-earth-clay text-earth-linen rounded-2xl flex items-center justify-center font-display font-black text-2xl shadow-xl">
+                                         {emp.fullName.charAt(0)}
+                                      </div>
+                                      <div className="space-y-1">
+                                         <div className="font-black text-earth-bark uppercase text-lg tracking-tighter">{emp.fullName}</div>
+                                         <div className="text-[10px] font-medium text-earth-bark/30 uppercase tracking-widest">{emp.email}</div>
+                                      </div>
+                                   </div>
+                                </TableCell>
+                                <TableCell>
+                                   <div className="flex items-center gap-16">
+                                      <div className="flex items-center gap-4">
+                                         <Switch checked={emp.permissions?.canManageInventory} onCheckedChange={() => toggleEmpPermission(emp._id, "canManageInventory", emp.permissions?.canManageInventory)} className="data-[state=checked]:bg-earth-sage" />
+                                         <span className="text-[10px] font-black uppercase tracking-widest text-earth-bark/40">Inventory</span>
+                                      </div>
+                                      <div className="flex items-center gap-4">
+                                         <Switch checked={emp.permissions?.canSeeRevenue} onCheckedChange={() => toggleEmpPermission(emp._id, "canSeeRevenue", emp.permissions?.canSeeRevenue)} className="data-[state=checked]:bg-earth-sage" />
+                                         <span className="text-[10px] font-black uppercase tracking-widest text-earth-bark/40">Revenue</span>
+                                      </div>
+                                   </div>
+                                </TableCell>
+                                <TableCell className="text-right px-12">
+                                   <Button size="icon" variant="ghost" className="w-12 h-12 rounded-xl bg-red-50 text-red-600 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600 hover:text-white" onClick={() => handleDeleteEmployee(emp._id)}>
+                                      <Trash2 className="w-5 h-5" />
+                                   </Button>
+                                </TableCell>
                              </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                             {employees.map(emp => (
-                               <TableRow key={emp._id} className="border-zinc-50">
-                                  <TableCell className="px-10 py-8">
-                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-zinc-100 rounded-full flex items-center justify-center font-bold text-zinc-500">
-                                           {emp.fullName.charAt(0)}
-                                        </div>
-                                        <div>
-                                           <div className="font-display font-extrabold uppercase text-lg leading-tight">{emp.fullName}</div>
-                                           <div className="text-[10px] font-bold uppercase text-zinc-400 tracking-widest">{emp.email}</div>
-                                        </div>
-                                     </div>
-                                  </TableCell>
-                                  <TableCell>
-                                     <div className="flex items-center gap-6">
-                                        <div className="flex items-center gap-2">
-                                           <Switch checked={emp.permissions?.canManageInventory} onCheckedChange={() => toggleEmpPermission(emp._id, "canManageInventory", emp.permissions?.canManageInventory)} />
-                                           <span className="text-[9px] font-black uppercase text-zinc-400 tracking-widest">Inventory</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                           <Switch checked={emp.permissions?.canSeeRevenue} onCheckedChange={() => toggleEmpPermission(emp._id, "canSeeRevenue", emp.permissions?.canSeeRevenue)} />
-                                           <span className="text-[9px] font-black uppercase text-zinc-400 tracking-widest">Finance</span>
-                                        </div>
-                                     </div>
-                                  </TableCell>
-                                  <TableCell className="text-right px-10">
-                                      <Button size="icon" variant="ghost" className="w-10 h-10 rounded-full hover:bg-red-50 text-zinc-300 hover:text-red-600 transition-all" onClick={() => handleDeleteEmployee(emp._id)}>
-                                         <Trash2 className="w-4 h-4" />
-                                      </Button>
-                                  </TableCell>
-                               </TableRow>
-                             ))}
-                          </TableBody>
-                       </Table>
-                    </Card>
+                          ))}
+                       </TableBody>
+                    </Table>
                  </div>
 
-                 {/* Onboarding Logic */}
-                 <div>
-                    <Card className="rounded-[3rem] border-zinc-100 shadow-3xl p-10 bg-white">
-                       <div className="flex items-center gap-3 mb-8">
-                          <UserPlus className="w-6 h-6 text-black" />
-                          <h3 className="text-2xl font-display font-extrabold tracking-tighter uppercase">Clearance</h3>
+                 <div className="organic-card p-12 bg-white shadow-xl space-y-12 group hover:organic-card-hover">
+                    <div className="space-y-6">
+                       <div className="w-16 h-16 bg-earth-saffron/10 text-earth-saffron flex items-center justify-center rounded-2xl">
+                          <UserPlus className="w-8 h-8" />
                        </div>
-                       <form onSubmit={handleAddEmployee} className="space-y-6">
-                          <div className="space-y-2">
-                             <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Full Name</Label>
-                             <Input value={empName} onChange={e => setEmpName(e.target.value)} required placeholder="Studio Lead" className="rounded-xl h-12" />
-                          </div>
-                          <div className="space-y-2">
-                             <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Identity Email</Label>
-                             <Input type="email" value={empEmail} onChange={e => setEmpEmail(e.target.value)} required placeholder="staff@thriftyy.com" className="rounded-xl h-12" />
-                          </div>
-                          <div className="space-y-2">
-                             <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400">Access Key (Pass)</Label>
-                             <Input type="password" value={empPass} onChange={e => setEmpPass(e.target.value)} required className="rounded-xl h-12" />
-                          </div>
-                          <div className="py-4 space-y-4">
-                             <Label className="uppercase text-[10px] font-black tracking-widest text-zinc-400 block mb-2">Primary Clearances</Label>
-                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold uppercase tracking-tight">Invemtory Mgt</span>
-                                <Switch checked={empPerms.canManageInventory} onCheckedChange={(val) => setEmpPerms({...empPerms, canManageInventory: val})} />
-                             </div>
-                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold uppercase tracking-tight">Finance Access</span>
-                                <Switch checked={empPerms.canSeeRevenue} onCheckedChange={(val) => setEmpPerms({...empPerms, canSeeRevenue: val})} />
-                             </div>
-                          </div>
-                          <Button type="submit" className="w-full py-7 rounded-2xl bg-black text-white font-black uppercase tracking-widest mt-4 shadow-xl">
-                             Onboard Staff
-                          </Button>
-                       </form>
-                    </Card>
+                       <h3 className="text-4xl font-display font-black text-earth-bark tracking-tighter leading-none">Onboard <br/> <span className="text-earth-clay italic">Specialist.</span></h3>
+                    </div>
+                    <form onSubmit={handleAddEmployee} className="space-y-10">
+                       <div className="space-y-4">
+                          <Label className="text-[10px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Full Identity</Label>
+                          <Input value={empName} onChange={e => setEmpName(e.target.value)} required placeholder="Staff Name" className="h-16 bg-earth-linen/50 border-earth-bark/10 rounded-[1.5rem] px-8 font-bold text-earth-bark" />
+                       </div>
+                       <div className="space-y-4">
+                          <Label className="text-[10px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Access Email</Label>
+                          <Input type="email" value={empEmail} onChange={e => setEmpEmail(e.target.value)} required placeholder="staff@thriftyy.studio" className="h-16 bg-earth-linen/50 border-earth-bark/10 rounded-[1.5rem] px-8 font-bold text-earth-bark" />
+                       </div>
+                       <div className="space-y-4">
+                          <Label className="text-[10px] font-black uppercase tracking-widest text-earth-bark/40 ml-6">Initial Secret</Label>
+                          <Input type="password" value={empPass} onChange={e => setEmpPass(e.target.value)} required className="h-16 bg-earth-linen/50 border-earth-bark/10 rounded-[1.5rem] px-8 text-earth-bark" />
+                       </div>
+                       <Button type="submit" className="clay-button w-full h-20 text-[11px] uppercase tracking-[0.3em] shadow-xl">
+                          Deploy Access Node
+                       </Button>
+                    </form>
                  </div>
               </div>
            </TabsContent>

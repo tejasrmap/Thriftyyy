@@ -33,8 +33,28 @@ const admin = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
-    res.status(401).json({ message: "Not authorized as an admin" });
+    res.status(403).json({ message: "Not authorized as an admin" });
   }
 };
 
-module.exports = { protect, admin };
+const staff = (req, res, next) => {
+  if (req.user && (req.user.role === "admin" || req.user.role === "employee")) {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as staff member" });
+  }
+};
+
+const checkPermission = (permission) => {
+  return (req, res, next) => {
+    if (req.user && req.user.role === "admin") {
+      return next();
+    }
+    if (req.user && req.user.role === "employee" && req.user.permissions && req.user.permissions[permission]) {
+      return next();
+    }
+    res.status(403).json({ message: `Insufficient permissions: ${permission} required` });
+  };
+};
+
+module.exports = { protect, admin, staff, checkPermission };
